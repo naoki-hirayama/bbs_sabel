@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{REQUEST_URI} \/\..+$
+  RewriteRule .* /notfound [R,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule !\.(js|ico|swf|css|html)$ index.php [QSA,L]
+
+  RewriteCond %{REQUEST_URI} ^/favicon.ico
+  RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
+  RewriteRule ^favicon.ico$ /assets/images/favicon.ico [L]
+</IfModule>
