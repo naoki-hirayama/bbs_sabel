@@ -51,34 +51,34 @@
                 <li>
                     <?= $post->id ?>
                     ID : 
-                    <?php echo $post['id'] ?><br />
+                    <?php echo $post->id ?><br />
                     名前：
-                    <?php if (isset($post['user_id'])) : ?>
-                        <a href="profile.php?id=<?php echo $post['user_id'] ?>"><?php echo h($user_names[$post['user_id']]) ?></a><br />
+                    <?php if (isset($post->user_id)) : ?>
+                        <a href="profile.php?id=<?php echo $post->user_id ?>"><?php echo h($user_names[$post['user_id']]) ?></a><br />
                     <?php else : ?>
-                        <?php echo h($post['name']) ?><br />
+                        <?php echo h($post->name) ?><br />
                     <?php endif ?>
                     本文：
-                    <font color="<?php echo $post['color'] ?>">
-                        <?php echo h($post['comment']) ?>
+                    <font color="<?php echo $post->color ?>">
+                        <?php echo h($post->comment) ?>
                     </font><br />
                     画像：
-                    <?php if (!empty($post['picture'])) : ?>
-                        <img src="images/posts/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
+                    <?php if (!empty($post->picture)) : ?>
+                        <img src="images/posts/<?php echo h($post->picture) ?>" width="300" height="200"><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>
                     時間：
-                    <?php echo $post['created_at'] ?><br />
+                    <?php echo $post->created_at ?><br />
                     レス :
                     <a href="/reply/index">
-                        <?php echo (isset($reply_counts[$post['id']])) ? $reply_counts[$post['id']] : 0 ?>件
+                        
                     </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
-                    <?php if (!empty($post['password'] )) : ?>
-                        <a href="/delete/index/<?php echo $post['id'] ?>">削除</a><br />
-                    <?php elseif (isset($post['user_id']) && isset($_SESSION['user_id']) && $post['user_id'] === $_SESSION['user_id']) : ?>
-                        <a href="/delete/index/<?php echo $post['id'] ?>">ユーザー削除</a><br />
+                    <?php if (!empty($post->password)) : ?>
+                        <a href="/index/delete/<?php echo $post->id ?>">削除</a><br />
+                    <?php elseif (isset($post->user_id) && isset($_SESSION['user_id']) && $post->user_id === $_SESSION['user_id']) : ?>
+                        <a href="/index/delete/<?php echo $post->id ?>">ユーザー削除</a><br />
                     <?php endif ?>
                     <!--　ここまで　-->
                 
@@ -87,8 +87,7 @@
             </foreach>
         </if>
         </ul>
-    
         <!--ページング処理-->
-        <partial name="pager" />
+        <partial name="shared/pager" />
         <!--ここまで-->
     <?php endif ?>

@@ -14,10 +14,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
         $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
         $paginator = new Paginator('Posts');
-        $paginator->setCondition(10);
-        $model->setLimit(4);
+        
         $paginator->setDefaultOrder('id', 'desc');
-        $this->paginator = $paginator->build(30, $this->GET_VARS);
+        $this->paginator = $paginator->build(3, $this->GET_VARS);
 
 
 
