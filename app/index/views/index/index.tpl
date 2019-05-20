@@ -49,7 +49,6 @@
         <if expr="$paginator->results">
             <foreach from="$paginator->results" value="$post">
                 <li>
-                    <?= $post->id ?>
                     ID : 
                     <?php echo $post->id ?><br />
                     名前：
