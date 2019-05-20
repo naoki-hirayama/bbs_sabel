@@ -1,7 +1,5 @@
-<?php if (!empty($_SESSION['user_id'])) : ?>
-    <form action="auth/logout" method="get" >
-        <input type="submit" name="logout" value="ログアウト">
-    </form>
+    <?php if (!empty($_SESSION['user_id'])) : ?>
+        <a href="/auth/logout">ログアウト</sa><br />
     <?php else : ?>
         <a href="/auth/register">登録はこちらから</sa><br />
         <a href="/auth/login">ログインはこちらから</a>
@@ -49,6 +47,7 @@
         <if expr="$paginator->results">
             <foreach from="$paginator->results" value="$post">
                 <li>
+                    
                     ID : 
                     <?php echo $post->id ?><br />
                     名前：
@@ -74,9 +73,10 @@
                         
                     </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
-                    <?php if (!empty($post->password)) : ?>
+                    
+                    <?php if (!is_null($post->password)) : ?>
                         <a href="/index/delete/<?php echo $post->id ?>">削除</a><br />
-                    <?php elseif (isset($post->user_id) && isset($_SESSION['user_id']) && $post->user_id === $_SESSION['user_id']) : ?>
+                    <?php elseif (!is_null($post->user_id) && is_null($post->password) && $post->user_id === $user_info['id']) : ?>
                         <a href="/index/delete/<?php echo $post->id ?>">ユーザー削除</a><br />
                     <?php endif ?>
                     <!--　ここまで　-->

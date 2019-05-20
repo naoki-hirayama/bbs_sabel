@@ -22,7 +22,7 @@
             時間：
             <?php echo h($post['created_at']) ?><br />
             ---------------------------------------------<br />
-            <form action="deleted" method="post">
+            <form action="/index/delete/<?php echo $param ?>" method="post">
             <?php if (isset($post['password']) && $post['password'] !== null) : ?>
                 <p>削除パスワード:</p>
                 <input type="password" name="password_input"><br />
