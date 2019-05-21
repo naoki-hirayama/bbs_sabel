@@ -9,7 +9,7 @@
     <h1>投稿画面</h1>
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
-    <form action="/" method="post" enctype="multipart/form-data">
+    <form action="<?php echo uri('') ?>" method="post" enctype="multipart/form-data">
         <p>名前：<?php echo !empty($_SESSION['user_id']) ? h($user_info['name']) : ''; ?></p>
         <?php if (!empty($_SESSION['user_id'])) : ?>
             <input type="hidden" name="name" value="<?php echo h($user_info['name']) ?>">
@@ -51,8 +51,8 @@
                     ID : 
                     <?php echo $post->id ?><br />
                     名前：
-                    <?php if (isset($post->user_id)) : ?>
-                        <a href="profile.php?id=<?php echo $post->user_id ?>"><?php echo h($user_names[$post['user_id']]) ?></a><br />
+                    <?php if (!is_null($post->user_id)) : ?>
+                        <a href="/profile/index/<?php echo $post->user_id ?>"><?php echo h($post->name) ?></a><br />
                     <?php else : ?>
                         <?php echo h($post->name) ?><br />
                     <?php endif ?>
@@ -72,11 +72,11 @@
                     <a href="/reply/index">
                         
                     </a><br />
-                    <!--if文でパスワードが設定されていなかったら非表示   -->
+                    <!--if文でパスワードが設定されていなかったら非表示 -->
                     
-                    <?php if (!is_null($post->password)) : ?>
+                    <?php if (!is_null($post->password) && is_null($post->user_id)) : ?>
                         <a href="/index/delete/<?php echo $post->id ?>">削除</a><br />
-                    <?php elseif (!is_null($post->user_id) && is_null($post->password) && $post->user_id === $user_info['id']) : ?>
+                    <?php elseif (!is_null($post->user_id) && isset($_SESSION['user_id']) && $post->user_id === $_SESSION['user_id']['value']) : ?>
                         <a href="/index/delete/<?php echo $post->id ?>">ユーザー削除</a><br />
                     <?php endif ?>
                     <!--　ここまで　-->

@@ -14,17 +14,19 @@ class Forms_Posts extends Form_Model
     protected $validators = array(
         'name'                  => array('validatePostNameLength'),
         'comment'               => array('validatePostCommentLength'),
-        'picture'               => array('image'),
+        'picture'               => array('image'),//サイズのバリデーション
         'color'                 => array('alnum'),
         'password'              => array('alnum' ,'validatePasswordLength'),
 
     );
-    //名前は全角5文字以内で入力してください ←どこからくる？
-    //本文は全角50文字以内で入力してください
+    //名前のバリデーション
     public function validatePostNameLength($name, $value)
-    {   
+    {
+        //テーブルの定義を変える　usersに合わせる
         if (!is_empty($value)) {
-            if (mb_strlen($value, 'UTF-8') > Posts::MAX_NAME_LENGTH) {
+            if (mb_strlen($value, 'UTF-8') === 0) {
+                return $this->getDisplayName($name) . "を" . "記入してください";
+            } else if (mb_strlen($value) > Posts::MAX_NAME_LENGTH) {
                 return $this->getDisplayName($name) . "は" . Posts::MAX_NAME_LENGTH . "文字以内です。";
             }
         }
@@ -32,12 +34,11 @@ class Forms_Posts extends Form_Model
     //本文のバリデーション
     public function validatePostCommentLength($name, $value) 
     {
-        if (!is_empty($value)) {
-            if (mb_strlen($value, 'UTF-8') > Posts::MAX_COMMENT_LENGTH) {
-                return $this->getDisplayName($name) . "は" . Posts::MAX_COMMENT_LENGTH . "文字以内です。";
-            }
+        if (mb_strlen($value, 'UTF-8') > Posts::MAX_COMMENT_LENGTH) {
+            return $this->getDisplayName($name) . "は" . Posts::MAX_COMMENT_LENGTH . "文字以内です。";
         }
     }
+    //パスワードのバリデーション
     public function validatePasswordLength($name, $value)
     {
         if (!is_empty($value)) {

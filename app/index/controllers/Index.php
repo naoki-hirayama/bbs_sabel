@@ -8,9 +8,10 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
         //user情報
         $model = MODEL('Users');
-        
+        //var_dump($_SESSION['user_id']);  
         $model->setCondition('id', $this->session->read('user_id'));
-        $this->user_info = $model->selectOne()->toArray(); 
+        $user_info = $model->selectOne()->toArray(); 
+        $this->user_info = $user_info; 
         //var_dump($model->selectOne()->toArray());
         
         $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
@@ -24,7 +25,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
         if ($this->isPost()) {
             //$post = $this->POST_VARS;
-
+            //var_dump($this->POST_VARS['name']);
             $this->form->submit($this->POST_VARS, array(
                 'name',
                 'comment',
@@ -33,11 +34,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 'color',
                 'password',
             ));
-
-            //画像投稿の処理
+            //var_dump($this->form->picture->toArray());
+            //画像投稿の処理 形式チェックはいらない
             //バリデーションの使い方
-
-
             if (!$this->form->validate()) {
                 $this->errors = $this->form->getErrors();
                 return;
@@ -65,7 +64,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $model = MODEL('Users');
         $model->setCondition('id', $this->session->read('user_id'));
         $this->user_info = $model->selectOne()->toArray();
-        //
+        
         $model = MODEL('Posts');
         $model->setCondition('id', $this->param);
         $this->post = $model->selectOne()->toArray();
