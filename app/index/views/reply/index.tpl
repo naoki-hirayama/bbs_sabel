@@ -1,6 +1,6 @@
 <body>
     <!--ログイン情報-->
-    <?php  include('views/layouts/loginuserinfo.php') ?>
+    <partial name="shared/info" />
     <a href="/"　class="btn btn-primary">投稿画面へ戻る</a>
     <ul>
         <li>
@@ -30,9 +30,9 @@
         </li>
     </ul>
     <!--エラーメッセージ-->
-    <?php  include('views/layouts/errormessage.php'); ?>
+    <partial name="shared/error" />
     <h2>レス投稿画面</h2>
-    <form action="reply.php?id=<?php echo $post['id'] ?>" method="post" enctype="multipart/form-data">
+    <form action="/reply/index/<?php echo $post['id'] ?>" method="post" enctype="multipart/form-data">
         <p>名前：<?php echo !empty($_SESSION['user_id']) ? h($user_info['name']) : ''; ?></p>
         <?php if (!empty($_SESSION['user_id'])) : ?>
             <input type="hidden" name="name" value="<?php echo h($user_info['name']) ?>">

@@ -24,8 +24,14 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $this->form = new Forms_Posts();
 
         if ($this->isPost()) {
-            //$post = $this->POST_VARS;
-            //var_dump($this->POST_VARS['name']);
+            /*
+            画像処理
+            $picture = $this->POST_VARS['picture']->toArray();
+            var_dump($picture); 
+            var_dump($_FILES);
+            */
+            // var_dump($_FILES);
+            //var_dump($this->POST_VARS['picture']->path); 
             $this->form->submit($this->POST_VARS, array(
                 'name',
                 'comment',
@@ -41,7 +47,39 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $this->errors = $this->form->getErrors();
                 return;
             }
-            
+
+            if (strlen($this->POST_VARS['picture']->name) > 0) {
+
+                $posted_picture = $this->POST_VARS['picture']->path;
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $picture_type = $finfo->file($posted_picture);
+                $specific_num = uniqid(mt_rand());
+                $rename_file = $specific_num . '.' . basename($picture_type);
+                $rename_file_path = 'images/' . $rename_file;
+                move_uploaded_file($this->POST_VARS['picture']->path, $rename_file_path);
+
+            }
+
+
+
+            $model = MODEL('Posts');
+            $model->name = $this->POST_VARS['name'];
+            $model->comment = $this->POST_VARS['comment'];
+            $model->picture = $rename_file;;
+            $model->color = $this->POST_VARS['color'];
+            $model->password = $this->POST_VARS['password'];
+            $model->user_id = $this->POST_VARS['user_id'];
+
+            $model->save();
+
+            $this->redirect->to('a: index');
+            return;
+
+
+
+
+
+
             $this->form->remove('MAX_FILE_SIZE');
             $this->form->user_id = $this->session->read('user_id');
             $this->form->getModel()->unsetValue('MAX_FILE_SIZE');

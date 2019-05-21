@@ -61,15 +61,15 @@
                         <?php echo h($post->comment) ?>
                     </font><br />
                     画像：
-                    <?php if (!empty($post->picture)) : ?>
-                        <img src="images/posts/<?php echo h($post->picture) ?>" width="300" height="200"><br />
+                    <?php if (!is_null($post->picture)) : ?>
+                        <img src="/images/posts/<?php echo h($post->picture) ?>" width="300" height="200"><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>
                     時間：
                     <?php echo $post->created_at ?><br />
                     レス :
-                    <a href="/reply/index">
+                    <a href="/reply/index/<?php echo $post->id ?>">1</a>
                         
                     </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示 -->

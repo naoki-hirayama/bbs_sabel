@@ -1,35 +1,30 @@
 <?php
 
-class Forms_Posts extends Form_Model
+class Forms_Posts extends  Form_Object
 {
     protected $displayNames = array(
         'name'             => '名前',
         'comment'          => '本文',
-        'picture'          => '写真',
+        'picture'          => '写真',//使えない
         'MAX_FILE_SIZE'    => '画像サイズ',
         'color'            => '文字色',
         'password'         => 'パスワード',
     );
 
     protected $validators = array(
-        'name'                  => array('validatePostNameLength'),
-        'comment'               => array('validatePostCommentLength'),
-        'picture'               => array('image'),//サイズのバリデーション
+        'name'                  => array('required', 'validatePostNameLength'),
+        'comment'               => array('required', 'validatePostCommentLength'),
+        'picture'               => array('validateImage'),//サイズのバリデーション
         'color'                 => array('alnum'),
         'password'              => array('alnum' ,'validatePasswordLength'),
-
     );
     //名前のバリデーション
     public function validatePostNameLength($name, $value)
     {
-        //テーブルの定義を変える　usersに合わせる
-        if (!is_empty($value)) {
-            if (mb_strlen($value, 'UTF-8') === 0) {
-                return $this->getDisplayName($name) . "を" . "記入してください";
-            } else if (mb_strlen($value) > Posts::MAX_NAME_LENGTH) {
-                return $this->getDisplayName($name) . "は" . Posts::MAX_NAME_LENGTH . "文字以内です。";
-            }
+        if (mb_strlen($value) > Posts::MAX_NAME_LENGTH) {
+            return $this->getDisplayName($name) . "は" . Posts::MAX_NAME_LENGTH . "文字以内です。";
         }
+        
     }
     //本文のバリデーション
     public function validatePostCommentLength($name, $value) 
@@ -48,7 +43,41 @@ class Forms_Posts extends Form_Model
                 return $this->getDisplayName($name) . "は" . Posts::MAX_PASSWORD_LENGTH . "文字以内です。";
             }
         }
-    }    
+    }
     //写真のバリデーション
+    public function validateImage($name, $value)
+    {
+        if(!is_empty($value)) {
+            if (strlen($value->name) > 0) {
+                if ($value->size > Posts::MAX_PICTURE_SIZE) {
+                    return "サイズが" . number_format(Posts::MAX_PICTURE_SIZE) . "MBを超えています。";
+                } else {
+                    // 画像ファイルのMIMEタイプチェック
+                    $posted_picture = $value->path;
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+
+                    $vaild_picture_types = [
+                        'image/png',
+                        'image/gif',
+                        'image/jpeg'
+                    ];
+
+                    if (!in_array($picture_type, $vaild_picture_types)) {
+                        return "画像が不正です。";
+                    }
+                }
+            }
+        }
+    }
+
+    //文字色
+    public function validateColor($name, $value)
+    {
+        if (!array_key_exists($value, self::getSelectColorOptions())) {
+            return "文字色が不正です";
+        }
+    }
+        
     
 }
