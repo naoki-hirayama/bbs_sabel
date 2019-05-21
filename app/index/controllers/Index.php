@@ -55,12 +55,10 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $picture_type = $finfo->file($posted_picture);
                 $specific_num = uniqid(mt_rand());
                 $rename_file = $specific_num . '.' . basename($picture_type);
-                $rename_file_path = 'images/' . $rename_file;
+                $rename_file_path = 'images/posts/' . $rename_file;
                 move_uploaded_file($this->POST_VARS['picture']->path, $rename_file_path);
 
             }
-
-
 
             $model = MODEL('Posts');
             $model->name = $this->POST_VARS['name'];
@@ -68,25 +66,12 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $model->picture = $rename_file;;
             $model->color = $this->POST_VARS['color'];
             $model->password = $this->POST_VARS['password'];
-            $model->user_id = $this->POST_VARS['user_id'];
+            $model->user_id = $this->session->read('user_id');
 
             $model->save();
 
             $this->redirect->to('a: index');
             return;
-
-
-
-
-
-
-            $this->form->remove('MAX_FILE_SIZE');
-            $this->form->user_id = $this->session->read('user_id');
-            $this->form->getModel()->unsetValue('MAX_FILE_SIZE');
-            $this->form->save();
-            $this->redirect->to('a: index');
-            return;
-            
         }
     }
 
