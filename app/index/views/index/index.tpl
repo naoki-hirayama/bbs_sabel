@@ -1,5 +1,5 @@
     <?php if (!empty($_SESSION['user_id'])) : ?>
-        <a href="/auth/logout">ログアウト</sa><br />
+        <a href="/auth/logout">ログアウト</a><br />
     <?php else : ?>
         <a href="/auth/register">登録はこちらから</sa><br />
         <a href="/auth/login">ログインはこちらから</a>

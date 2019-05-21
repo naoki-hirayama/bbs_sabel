@@ -60,9 +60,33 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 return;
             }
 
+            if (strlen($this->POST_VARS['picture']->name) > 0) {
+
+                $posted_picture = $this->POST_VARS['picture']->path;
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $picture_type = $finfo->file($posted_picture);
+                $specific_num = uniqid(mt_rand());
+                $rename_file = $specific_num . '.' . basename($picture_type);
+                $rename_file_path = 'images/users/' . $rename_file;
+                move_uploaded_file($this->POST_VARS['picture']->path, $rename_file_path);
+
+                if (empty($this->user_info['picture'])) {
+                    $file = $rename_file;
+                } else {
+                    $file = $rename_file;
+                    unlink("images/users/{$this->user_info['picture']}");
+                }
+            } else {
+                $file = !empty($this->user_info['picture']) ? $this->user_info['picture'] : null;
+            }
+
+
+
+
+
             $model = MODEL('Users', $this->session->read('user_id'));
             $model->name = $this->POST_VARS['name'];
-            $model->picture = $this->POST_VARS['picture'];
+            $model->picture = $file;
             $model->comment = $this->POST_VARS['comment'];
             $model->login_id = $this->POST_VARS['login_id'];
 

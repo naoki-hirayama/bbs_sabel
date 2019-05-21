@@ -1,6 +1,6 @@
 <?php
 
-class Forms_Users extends Form_Model
+class Forms_Users extends Form_Object
 {
     protected $displayNames = array(
         'name'             => '名前',
@@ -11,14 +11,14 @@ class Forms_Users extends Form_Model
         'confirm_password' => 'パスワード(確認)',
         'current_password' => 'パスワード(現在)',
         'new_password' => 'パスワード(新しい)',
-        'new_confirm_password' => 'パスワード(new確認)',
+        'new_confirm_password' => 'パスワード(確認)',
     );
 
     protected $validators = array(
-        'name'                      => array('validateNameLength'),
-        'login_id'                  => array('alnum', 'validateLoginIdLength'),//第二引数でメソッドを指定
-        'password,confirm_password' => array('same'),
-        'picture'                   => array('image'),
+        'name'                      => array('required', 'validateNameLength'),
+        'login_id'                  => array('required', 'alnum', 'validateLoginIdLength'),//第二引数でメソッドを指定
+        'password,confirm_password' => array('required', 'same'),
+        'picture'                   => array('validateImage'),
         'comment'                   => array('validateCommentLength'),
         'new_password,new_confirm_password' => array('same'),
 
@@ -26,13 +26,11 @@ class Forms_Users extends Form_Model
 
     public function validateLoginIdLength($name, $value)
     {
-        if (!is_empty($value)) {
-            if (mb_strlen($value, 'UTF-8') < Users::MIN_LOGIN_ID_LENGTH) {
-                return $this->getDisplayName($name) . "は" . Users::MIN_LOGIN_ID_LENGTH . "文字以上です。";
-            } else if (mb_strlen($value) > Users::MAX_LOGIN_ID_LENGTH) {
-                return $this->getDisplayName($name) . "は" . Users::MAX_LOGIN_ID_LENGTH . "文字以内です。";
-            }
+        
+        if (mb_strlen($value) > Users::MAX_LOGIN_ID_LENGTH) {
+            return $this->getDisplayName($name) . "は" . Users::MAX_LOGIN_ID_LENGTH . "文字以内です。";
         }
+        
     }
 
     public function validateNameLength($name, $value)
@@ -52,6 +50,33 @@ class Forms_Users extends Form_Model
             if (mb_strlen($value, 'UTF-8') > Users::MAX_COMMENT_LENGTH) {
                 return $this->getDisplayName($name) . "は" . Users::MAX_COMMENT_LENGTH . "文字以内です。";
             } 
+        }
+    }
+
+    //写真のバリデーション
+    public function validateImage($name, $value)
+    {
+        if (!is_empty($value)) {
+            if (strlen($value->name) > 0) {
+                if ($value->size > Posts::MAX_PICTURE_SIZE) {
+                    return "サイズが" . number_format(Posts::MAX_PICTURE_SIZE) . "MBを超えています。";
+                } else {
+                    // 画像ファイルのMIMEタイプチェック
+                    $posted_picture = $value->path;
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+
+                    $vaild_picture_types = [
+                        'image/png',
+                        'image/gif',
+                        'image/jpeg'
+                    ];
+
+                    if (!in_array($picture_type, $vaild_picture_types)) {
+                        return "画像が不正です。";
+                    }
+                }
+            }
         }
     }
 }

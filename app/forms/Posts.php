@@ -24,7 +24,6 @@ class Forms_Posts extends  Form_Object
         if (mb_strlen($value) > Posts::MAX_NAME_LENGTH) {
             return $this->getDisplayName($name) . "は" . Posts::MAX_NAME_LENGTH . "文字以内です。";
         }
-        
     }
     //本文のバリデーション
     public function validatePostCommentLength($name, $value) 

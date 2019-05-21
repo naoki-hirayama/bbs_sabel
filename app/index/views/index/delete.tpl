@@ -1,7 +1,7 @@
 <body>
     <h2>削除画面</h2>
     <!--ログイン情報-->
-    
+    <partial name="shared/info" />
     <!--エラーメッセージ-->
     <partial name="shared/error" />
 
@@ -15,7 +15,7 @@
             </font><br />
             画像：
             <?php if (!empty($post['picture'])) : ?>
-                <img src="images/posts/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
+                <img src="/images/posts/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
             <?php else : ?>
                 なし<br />
             <?php endif ?>

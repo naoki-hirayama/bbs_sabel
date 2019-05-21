@@ -6,3 +6,5 @@ logs/*
 
 vendor
 public/images/posts/*
+public/images/users/*
+public/images/replies/*

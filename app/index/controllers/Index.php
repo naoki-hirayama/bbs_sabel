@@ -70,7 +70,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
             $model->save();
 
-            $this->redirect->to('a: index');
+            $this->redirect->to('a: send');
             return;
         }
     }
@@ -78,6 +78,12 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function send()
     {
         $this->title = '投稿成功';
+
+        //user情報
+        $model = MODEL('Users');
+        $model->setCondition('id', $this->session->read('user_id'));
+        $user_info = $model->selectOne()->toArray();
+        $this->user_info = $user_info; 
     }
 
     public function delete()
@@ -106,6 +112,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $model->setCondition('id', $this->param);
                 //↑２行コメントアウトすると全部消える
                 $model->delete();
+                if (!empty($this->post['picture'])) {
+                    unlink("images/posts/{$this->post['picture']}");
+                }
                 $this->redirect->to('a: deleted');
                 return;
             } else {
