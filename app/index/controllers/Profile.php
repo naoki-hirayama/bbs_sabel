@@ -39,7 +39,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $this->form = new Forms_Users();
         if ($this->isPost()) {
             if ($this->POST_VARS['login_id'] === $this->user_info['login_id']) {
-                
+
                 $this->form->submit($this->POST_VARS, array(
                     'name',
                     'comment',
@@ -89,6 +89,37 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $model->setCondition('id', $this->session->read('user_id'));
         $user_info = $model->selectOne()->toArray();
         $this->user_info = $user_info;
+
+        $this->form = new Forms_Users();
+        if ($this->isPost()) {
+
+            $this->form->submit($this->POST_VARS, array(
+                'new_confirm_password',
+                'new_password',
+            ));
+            
+
+            if (!$this->form->validate()) {
+                $this->errors = $this->form->getErrors();
+                return;
+            }
+
+            $errors = [];
+            if (!password_verify($this->POST_VARS['current_password'], $this->user_info['password'])) {
+                $errors[] = "パスワードが一致しません";
+                $this->errors = $errors;
+                return;
+            }
+            
+            $password_hash = password_hash($this->POST_VARS['new_password'], PASSWORD_DEFAULT);
+            $model = MODEL('Users', $this->session->read('user_id'));
+            $model->password = $password_hash;
+
+            $model->save();
+
+            $this->redirect->to('a: index');
+            return;
+        }
 
     }
 

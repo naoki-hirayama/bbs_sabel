@@ -9,6 +9,9 @@ class Forms_Users extends Form_Model
         'picture'          => '画像',
         'comment'          => '一言コメント',
         'confirm_password' => 'パスワード(確認)',
+        'current_password' => 'パスワード(現在)',
+        'new_password' => 'パスワード(新しい)',
+        'new_confirm_password' => 'パスワード(new確認)',
     );
 
     protected $validators = array(
@@ -17,6 +20,7 @@ class Forms_Users extends Form_Model
         'password,confirm_password' => array('same'),
         'picture'                   => array('image'),
         'comment'                   => array('validateCommentLength'),
+        'new_password,new_confirm_password' => array('same'),
 
     );
 
