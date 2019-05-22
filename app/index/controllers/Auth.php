@@ -7,32 +7,29 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->title = "ログイン画面";
         $this->form = new Forms_Users();
 
-        if ($this->session->read('user_id')) {
+        if ($this->IS_LOGIN) {
             $this->redirect->uri('/'); 
             return;
         }
         
         if ($this->isPost()) {
             
-            $post = $this->POST_VARS;
-            //$this->login_id;
-
             $model = MODEL('Users');
-            $model->setCondition('login_id', $post['login_id']);
-            $user = $model->selectOne()->toArray();
-           
+            $model->setCondition('login_id', $this->login_id);
+            $user = $model->selectOne();
+            
             $errors = [];
-            if (empty($user)) {
-                $errors [] = "パスワードかログインIDが違います。";
+            if (!$user->isSelected()) {
+                $errors [] = "パスワードかログインIDが違います。h";
                 $this->errors = $errors;
                 return;
             } else {
-                if (!password_verify($post['password'], $user['password'])) {
+                if (!password_verify($this->password, $user->password)) {
                     $errors[] = "パスワードかログインIDが違います。";
                     $this->errors = $errors;
                     return;
                 } else {
-                    $this->session->write('user_id', $user['id']);
+                    $this->session->write('user_id', $user->id);
                     $this->redirect->uri('/');
                     return;
                 }

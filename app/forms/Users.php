@@ -1,6 +1,6 @@
 <?php
 
-class Forms_Users extends Form_Object
+class Forms_Users extends Form_Model
 {
     protected $displayNames = array(
         'name'             => '名前',
@@ -16,8 +16,9 @@ class Forms_Users extends Form_Object
 
     protected $validators = array(
         'name'                      => array('required', 'validateNameLength'),
-        'login_id'                  => array('required', 'alnum', 'validateLoginIdLength'),//第二引数でメソッドを指定
-        'password,confirm_password' => array('required', 'same'),
+        'login_id'                  => array('-strwidth', 'strlen(' . Users::MAX_LOGIN_ID_LENGTH . ')', 'alnum'),
+        'password,confirm_password' => array('same'),
+        'confirm_password'          => array('required'),
         'picture'                   => array('validateImage'),
         'comment'                   => array('validateCommentLength'),
         'new_password,new_confirm_password' => array('same'),

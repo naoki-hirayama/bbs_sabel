@@ -1,8 +1,8 @@
-<?php if (isset($user_info['picture'])) : ?>
-    <img src="/images/users/<?php echo h($user_info['picture']) ?>" width="50" height="50"><br />
-<?php endif ?>
-<?php if (isset($_SESSION['user_id'])) : ?>
-    <P>ようこそ！<a href="/profile/index/<?php echo $user_info['id'] ?>"><?php echo h($user_info['name']) ?></a>さん(<?php echo h($user_info['login_id']) ?>)</P>
-<?php else : ?>
-    <P>ようこそ!ゲストさん</P>
-<?php endif ?>
+<? if ($IS_LOGIN) : ?>
+    <? if (!is_empty($LOGIN_USER->picture)) : ?>
+        <img src="/images/users/<?= $LOGIN_USER->picture ?>" width="50" height="50"><br />
+    <? endif ?>
+    <p>ようこそ！<a href="/profile/index/<?e $LOGIN_USER->id ?>"><?= $LOGIN_USER->name ?></a>さん(<?= $LOGIN_USER->login_id ?>)</p>
+<? else : ?>
+    <p>ようこそ!ゲストさん</p>
+<? endif ?>

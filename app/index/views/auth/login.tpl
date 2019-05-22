@@ -3,12 +3,12 @@
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
     
-    <form action="<?php echo uri('') ?>" method="post" >
-        <p><?php echo h($form->n('login_id')) ?>：</p>
-        <?php echo $form->text('login_id') ?><br />
-        <p><?php echo h($form->n('password')) ?>：</p>
-        <?php echo $form->password('password') ?><br />
-        <input type="submit" name="login" value="ログインする">
+    <form action="<? uri('') ?>" method="post" >
+        <p><?= $form->n('login_id') ?>：</p>
+        <?e $form->text('login_id') ?><br />
+        <p><?= $form->n('password') ?>：</p>
+        <?e $form->password('password') ?><br />
+        <input type="submit" value="ログインする">
     </form>
     <a href="/auth/register"　class="btn btn-primary"> 未登録の方はこちらへ</a>
 </body>
