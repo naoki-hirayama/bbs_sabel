@@ -5,7 +5,7 @@ class Forms_Posts extends  Form_Object
     protected $displayNames = array(
         'name'             => '名前',
         'comment'          => '本文',
-        'picture'          => '写真',//使えない
+        'picture'          => '写真',
         'MAX_FILE_SIZE'    => '画像サイズ',
         'color'            => '文字色',
         'password'         => 'パスワード',

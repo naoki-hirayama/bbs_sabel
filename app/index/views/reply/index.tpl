@@ -8,7 +8,7 @@
             <?php echo $post['id'] ?><br />
             名前：
             <?php if (!empty($post['user_id'])) : ?>
-                <a href="profile.php?id=<?php echo $post['user_id'] ?>">
+                <a href="/profile/index/<?php echo $post['user_id'] ?>"><?php echo h($post['name']) ?>
                     <?php echo h($current_user_name['name']); ?>
                 </a><br />
             <?php else : ?>
@@ -20,7 +20,7 @@
             </font><br />
             画像：
             <?php if (!empty($post['picture'])) : ?>
-                <img src="images/posts/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
+                <img src="/images/posts/<?php echo h($post['picture']) ?>" width="300" height="200"><br />
             <?php else : ?>
                 なし<br />
             <?php endif ?>
@@ -72,37 +72,33 @@
             <?php foreach ($reply_posts as $reply_post) : ?>
                 <li>
                     レスID :
-                    <?php echo $reply_post['id'] ?><br />
+                    <?php echo $reply_post->id ?><br />
                     名前：
-                    <?php if (isset($reply_post['user_id']) && isset($users)) : ?>
+                    <?php if (isset($reply_post->user_id) && isset($users)) : ?>
                         <a href="profile.php?id=<?php echo $reply_post['user_id'] ?>"><?php echo h($user_names_are_key_as_user_ids[$reply_post['user_id']]) ?></a><br />
                     <?php else : ?>
-                        <?php echo h($reply_post['name']) ?><br />
+                        <?php echo h($reply_post->name) ?><br />
                     <?php endif ?>
                     本文：
-                    <font color="<?php echo $reply_post['color'] ?>">
-                        <?php echo h($reply_post['comment']) ?>
+                    <font color="<?php echo $reply_post->color ?>">
+                        <?php echo h($reply_post->comment) ?>
                     </font><br />
                     画像：
-                    <?php if (!empty($reply_post['picture'])) : ?>
-                        <img src="images/replies/<?php echo h($reply_post['picture']) ?>" width="300" height="200"><br />
+                    <?php if (!is_null($reply_post->picture)) : ?>
+                        <img src="/images/replies/<?php echo h($reply_post->picture) ?>" width="300" height="200"><br />
                     <?php else : ?>
                         なし<br />
                     <?php endif ?>
                     時間：
-                    <?php echo $reply_post['created_at'] ?><br />
+                    <?php echo $reply_post->created_at ?><br />
                     <!--if文でパスワードが設定されていなかったら非表示   -->
-                    <?php if (!empty($reply_post['password'] )) : ?>
-                        <form action="deletereply.php" method="get">
-                            <input type="hidden" name="id" value="<?php echo $reply_post['id'] ?>">
-                            <input type="submit" value="削除"/><br />
-                        </form>
-                    <?php elseif (isset($reply_post['user_id']) && isset($_SESSION['user_id']) && $reply_post['user_id'] === $_SESSION['user_id']) : ?>
-                        <form action="deletereply.php" method ="get">
-                            <input type="hidden" name="id" value="<?php echo $reply_post['id'] ?>">
-                            <input type="submit" value="ユーザー削除"/><br />
-                        </form>
+                    <?php if (!is_null($reply_post->password) && is_null($reply_post->user_id)) : ?>
+                        <a href="/reply/delete/<?php echo $reply_post->post_id ?>">削除</a><br />
+                    <?php elseif (!is_null($reply_post->user_id) && isset($_SESSION['user_id']) && $reply_post->user_id === $_SESSION['user_id']['value']) : ?>
+                        <a href="/reply/delete/<?php echo $reply_post->id ?>">ユーザー削除</a><br />
                     <?php endif ?>
+
+                    
                     <!--　ここまで　-->
                 
                     ---------------------------------------------<br />

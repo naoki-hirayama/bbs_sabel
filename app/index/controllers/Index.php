@@ -8,11 +8,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
         //user情報
         $model = MODEL('Users');
-        //var_dump($_SESSION['user_id']);  
         $model->setCondition('id', $this->session->read('user_id'));
         $user_info = $model->selectOne()->toArray(); 
         $this->user_info = $user_info; 
-        //var_dump($model->selectOne()->toArray());
         
         $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
         $this->picture_max_size = 1 * 1024 * 1024;
@@ -24,25 +22,16 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $this->form = new Forms_Posts();
 
         if ($this->isPost()) {
-            /*
-            画像処理
-            $picture = $this->POST_VARS['picture']->toArray();
-            var_dump($picture); 
-            var_dump($_FILES);
-            */
-            // var_dump($_FILES);
-            //var_dump($this->POST_VARS['picture']->path); 
+            
             $this->form->submit($this->POST_VARS, array(
                 'name',
                 'comment',
-                'picture',
                 'MAX_FILE_SIZE',
                 'color',
                 'password',
+                'picture',
             ));
-            //var_dump($this->form->picture->toArray());
-            //画像投稿の処理 形式チェックはいらない
-            //バリデーションの使い方
+            
             if (!$this->form->validate()) {
                 $this->errors = $this->form->getErrors();
                 return;
@@ -63,7 +52,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $model = MODEL('Posts');
             $model->name = $this->POST_VARS['name'];
             $model->comment = $this->POST_VARS['comment'];
-            $model->picture = $rename_file;;
+            $model->picture = $rename_file;
             $model->color = $this->POST_VARS['color'];
             $model->password = $this->POST_VARS['password'];
             $model->user_id = $this->session->read('user_id');
@@ -110,11 +99,17 @@ class Index_Controllers_Index extends Index_Controllers_Base
             if ($this->post['password'] === $this->form->password_input) {
                 $model = MODEL('Posts');
                 $model->setCondition('id', $this->param);
-                //↑２行コメントアウトすると全部消える
+
                 $model->delete();
                 if (!empty($this->post['picture'])) {
                     unlink("images/posts/{$this->post['picture']}");
                 }
+
+                $model = MODEL('Replies');
+                $model->setCondition(eq('post_id', $this->param));
+                $model->delete();
+
+
                 $this->redirect->to('a: deleted');
                 return;
             } else {
