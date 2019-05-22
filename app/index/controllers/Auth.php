@@ -15,6 +15,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         if ($this->isPost()) {
             
             $post = $this->POST_VARS;
+            //$this->login_id;
 
             $model = MODEL('Users');
             $model->setCondition('login_id', $post['login_id']);

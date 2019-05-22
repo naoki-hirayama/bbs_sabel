@@ -19,6 +19,25 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $paginator->setDefaultOrder('id', 'desc');
         $this->paginator = $paginator->build(4, $this->GET_VARS);
 
+        //var_dump($paginator->build(4, $this->GET_VARS)->toArray());
+        /*
+            $user_ids = [];
+            $post_ids = [];
+            foreach ($posts as $post) {
+                $post_ids[] = $post['id'];
+                if (isset($post['user_id'])) {
+                    $user_ids[] = $post['user_id'];
+                }
+            }
+            
+            if (!empty($user_ids)) {
+                $users = $user_repository->fetchByIds($user_ids);
+                $user_names = array_column($users, 'name', 'id');
+            }
+            
+            $reply_counts = $reply_repository->fetchCountByPostIds($post_ids);
+        */
+        //$count = Model('User')->getCount();
         $this->form = new Forms_Posts();
 
         if ($this->isPost()) {

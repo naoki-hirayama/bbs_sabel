@@ -38,7 +38,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
 
         $this->form = new Forms_Users();
         if ($this->isPost()) {
-            if ($this->POST_VARS['login_id'] === $this->user_info['login_id']) {
+            if ($this->login_id === $this->user_info['login_id']) {
 
                 $this->form->submit($this->POST_VARS, array(
                     'name',
@@ -80,10 +80,6 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 $file = !empty($this->user_info['picture']) ? $this->user_info['picture'] : null;
             }
 
-
-
-
-
             $model = MODEL('Users', $this->session->read('user_id'));
             $model->name = $this->POST_VARS['name'];
             $model->picture = $file;
@@ -122,7 +118,6 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 'new_password',
             ));
             
-
             if (!$this->form->validate()) {
                 $this->errors = $this->form->getErrors();
                 return;
