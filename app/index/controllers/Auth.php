@@ -42,13 +42,13 @@ class Index_Controllers_Auth extends Index_Controllers_Base
     public function logout()
     {
         $this->title = "ログアウト";
-        if ($this->session->read('user_id') === null) {
+
+        if (!$this->IS_LOGIN) {
             $this->redirect->uri('/');
             return;
         }
 
         $this->session->destroy();
-
     }
 
     public function register()
