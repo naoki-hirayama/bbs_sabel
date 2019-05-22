@@ -4,14 +4,14 @@
     <partial name="shared/error" />
     
     <form action="<?php echo uri('') ?>" method="post" >
-        <p><?php echo h($form->n('name')) ?>：</p>
-        <?php echo $form->text('name') ?><br />
-        <p><?php echo h($form->n('login_id')) ?>：</p>
-        <?php echo $form->text('login_id') ?><br />
-        <p><?php echo h($form->n('password')) ?>：</p>
-        <?php echo $form->password('password') ?><br />
-        <p><?php echo h($form->n('confirm_password')) ?>：</p>
-        <?php echo $form->password('confirm_password') ?><br />
+        <p><?= $form->n('name') ?>：</p>
+        <?e $form->text('name') ?><br />
+        <p><?= $form->n('login_id') ?>：</p>
+        <?e $form->text('login_id') ?><br />
+        <p><?= $form->n('password') ?>：</p>
+        <?e $form->password('password') ?><br />
+        <p><?= $form->n('confirm_password') ?>：</p>
+        <?e $form->password('confirm_password') ?><br />
         <input type="submit" name="signup" value="登録する">
     </form>
     <a href="/auth/login"　class="btn btn-primary">すでに登録済みの方はこちらへ</a><br />

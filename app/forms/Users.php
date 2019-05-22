@@ -6,23 +6,18 @@ class Forms_Users extends Form_Model
         'name'             => '名前',
         'login_id'         => 'ログインID',
         'password'         => 'パスワード',
+        'confirm_password' => 'パスワード(確認)',
         'picture'          => '画像',
         'comment'          => '一言コメント',
-        'confirm_password' => 'パスワード(確認)',
-        'current_password' => 'パスワード(現在)',
-        'new_password' => 'パスワード(新しい)',
-        'new_confirm_password' => 'パスワード(確認)',
     );
 
     protected $validators = array(
-        'name'                      => array('required', 'validateNameLength'),
+        'name'                      => array('-strwidth', 'strlen(' . Users::MAX_NAME_LENGTH . ')'),
         'login_id'                  => array('-strwidth', 'strlen(' . Users::MAX_LOGIN_ID_LENGTH . ')', 'alnum'),
         'password,confirm_password' => array('same'),
         'confirm_password'          => array('required'),
-        'picture'                   => array('validateImage'),
-        'comment'                   => array('validateCommentLength'),
-        'new_password,new_confirm_password' => array('same'),
-
+        'picture'                   => array('-strwidth', 'image("' . (Users::MAX_PICTURE_SIZE / 1024 / 1024) . 'M")'),
+        'comment'                      => array('-strwidth', 'strlen(' . Users::MAX_COMMENT_LENGTH . ')'),
     );
 
     public function validateLoginIdLength($name, $value)
