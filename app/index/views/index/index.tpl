@@ -54,7 +54,7 @@
                     <?= $post->id ?><br />
                     名前：
                     <? if (!is_null($post->user_id)) : ?>
-                        <a href="/profile/index/<?e $post->user_id ?>"><?= $post->name ?></a><br />
+                        <a href="/profile/index/<?= $post->user_id ?>"><?= $user_names[$post->user_id] ?></a><br />
                     <? else : ?>
                         <?= $post->name ?><br />
                     <? endif ?>
@@ -71,8 +71,9 @@
                     時間：
                     <?=  $post->created_at ?><br />
                     レス :
-                    <a href="/reply/index/<?= $post->id ?>">1</a>
-                        
+                    <a href="/reply/index/<?= $post->id ?>">
+                    <?php echo $reply_counts[$post->id] ?>
+                    <?php (!is_null($reply_counts[$post->id])) ? $reply_counts[$post->id] : 0 ?>件
                     </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示 -->
                     <? if (!is_null($post->password) && is_null($post->user_id)) : ?>

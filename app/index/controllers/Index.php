@@ -5,12 +5,40 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function index()
     {
         $this->title = "投稿一覧";
-        
+        $per_page_records = 4;
         $paginator = new Paginator('Posts');
-        
         $paginator->setDefaultOrder('id', 'desc');
-        $this->paginator = $paginator->build(4, $this->GET_VARS);
+        $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
 
+        $user_ids = [];
+        $post_ids = [];
+        foreach ($paginator->results as $post) {
+            $post_ids[] = $post->id;
+            if (!is_null($post->user_id)) {
+                $user_ids[] = $post->user_id;
+            }
+        }
+    
+        if (!empty($user_ids)) {
+            $sanitized_ids = [];
+            foreach ($user_ids as $user_id) {
+                $sanitized_ids[] = (int)$user_id;
+            }
+
+            $users = db_query("SELECT * FROM users WHERE id IN (" . implode(',', $sanitized_ids) . ")");
+            $user_names = array_column($users, 'name', 'id');
+            $this->user_names = $user_names;
+        }
+
+        $sanitized_ids = [];
+        foreach ($post_ids as $post_id) {
+            $sanitized_ids[] = (int)$post_id;
+        }
+
+        $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $sanitized_ids) . ") GROUP BY post_id");
+        
+        $reply_counts = array_column($tmp, 'cnt', 'post_id');
+        $this->reply_counts = $reply_counts;
         $this->form = $form = new Forms_Posts();
 
         if ($this->isPost()) {
