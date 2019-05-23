@@ -56,10 +56,6 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function delete()
     {
         $this->title = '削除ページ';
-        
-        // $model = MODEL('Posts');
-        // $model->setCondition('id', $this->param);
-        // $this->post = $model->selectOne();
 
         $this->post = MODEL('Posts', $this->param);
 
@@ -75,31 +71,27 @@ class Index_Controllers_Index extends Index_Controllers_Base
         
         if ($this->isPost()) {
 
-            if ($this->post->password === $this->POST_VARS['password_input']) {
-                // $model = MODEL('Posts');
-                // $model->setCondition('id', $this->param);
+            if ($this->post->password !== $this->POST_VARS['password_input']) {
 
-                $this->post->delete();
-                if (!is_null($this->post->picture)) {
-                    unlink("images/posts/{$this->post->picture}");
-                }
-
-                $model = MODEL('Replies');
-                $model->setCondition(eq('post_id', $this->param));
-                $model->delete();
-
-                $this->redirect->to('a: deleted');
+                $errors = [];
+                $errors[] = "パスワードが違います。";
+                $this->errors = $errors;
                 return;
             }
 
-            $errors = [];
-            $errors[] = "パスワードが違います。";
-            $this->errors = $errors;
+            $this->post->delete();
+
+            if (!is_null($this->post->picture)) {
+                unlink("images/posts/{$this->post->picture}");
+            }
+
+            $post_repleis = MODEL('Replies');
+            $post_repleis->setCondition(eq('post_id', $this->param));
+            $post_repleis->delete();
+
+            $this->redirect->to('a: deleted');
             return;
-            
         }
-
-
     }
 
     public function deleted()

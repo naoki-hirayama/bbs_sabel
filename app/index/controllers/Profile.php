@@ -4,142 +4,115 @@ class Index_Controllers_Profile extends Index_Controllers_Base
 {
     public function index()
     {
-        //存在しないidの場合リダイレクト
         $this->title = "プロフィール";
-        //user情報
-        $model = MODEL('Users');  
-        $model->setCondition('id', $this->session->read('user_id'));
-        $user_info = $model->selectOne()->toArray();
-        $this->user_info = $user_info;
+
         //パラメーターからuser情報を取得
-        $model = MODEL('Users');
-        $model->setCondition('id', $this->param);
-        $this->user = $model->selectOne()->toArray();
-        //存在しないuserにアクセスされた時
-        if (!$this->user) {
+        $this->user = MODEL('Users', $this->param);
+
+        //存在しないidの場合リダイレクト
+        if (!$this->user->isSelected()) {
             $this->redirect->uri('/');
             return;
         }
-        
     }
 
     public function edit()
     {
-        if (!$this->session->read('user_id')) {
+        if (!$this->IS_LOGIN) {
             $this->redirect->uri('/');
             return;
         }
 
         $this->title = "プロフィール編集";
-        $model = MODEL('Users');
-        $model->setCondition('id', $this->session->read('user_id'));
-        $user_info = $model->selectOne()->toArray();
-        $this->user_info = $user_info;
 
-        $this->form = new Forms_Users();
+        $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
+
         if ($this->isPost()) {
-            if ($this->login_id === $this->user_info['login_id']) {
+            $form->submit($this->POST_VARS, array(
+                'name',
+                'login_id',
+                'comment',
+                'picture',
+            ));
 
-                $this->form->submit($this->POST_VARS, array(
-                    'name',
-                    'comment',
-                    'picture',
-                ));
-            } else {
-
-                $this->form->submit($this->POST_VARS, array(
-                    'name',
-                    'login_id',
-                    'comment',
-                    'picture',
-                ));
-            }
-
-            if (!$this->form->validate()) {
-                $this->errors = $this->form->getErrors();
+            if (!$form->validate()) {
+                $this->errors = $form->getErrors();
                 return;
             }
 
-            if (strlen($this->POST_VARS['picture']->name) > 0) {
-
-                $posted_picture = $this->POST_VARS['picture']->path;
+            // if (!empty($form->picture)) {
+            if (!is_empty($form->picture)) {
+                $posted_picture = $form->picture->path;
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                 $picture_type = $finfo->file($posted_picture);
                 $specific_num = uniqid(mt_rand());
                 $rename_file = $specific_num . '.' . basename($picture_type);
                 $rename_file_path = 'images/users/' . $rename_file;
-                move_uploaded_file($this->POST_VARS['picture']->path, $rename_file_path);
+                move_uploaded_file($posted_picture, $rename_file_path);
 
-                if (empty($this->user_info['picture'])) {
-                    $file = $rename_file;
-                } else {
-                    $file = $rename_file;
-                    unlink("images/users/{$this->user_info['picture']}");
+                if (!empty($this->LOGIN_USER->picture)) {
+                    unlink("images/users/{$this->LOGIN_USER->picture}");
                 }
+
+                $form->picture = $rename_file;
             } else {
-                $file = !empty($this->user_info['picture']) ? $this->user_info['picture'] : null;
+                $form->picture = $this->LOGIN_USER->picture;
             }
 
-            $model = MODEL('Users', $this->session->read('user_id'));
-            $model->name = $this->POST_VARS['name'];
-            $model->picture = $file;
-            $model->comment = $this->POST_VARS['comment'];
-            $model->login_id = $this->POST_VARS['login_id'];
-
-            $model->save();
+            $form->save();
 
             $this->redirect->to('a: index');
             return;
         }
-
-
     }
 
     public function password()
     {
-        if (!$this->session->read('user_id')) {
+        if (!$this->IS_LOGIN) {
             $this->redirect->uri('/');
             return;
         }
-        
 
         $this->title = "パスワード変更";
-        $model = MODEL('Users');
-        //var_dump($_SESSION['user_id']);  
-        $model->setCondition('id', $this->session->read('user_id'));
-        $user_info = $model->selectOne()->toArray();
-        $this->user_info = $user_info;
 
-        $this->form = new Forms_Users();
+        $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
+        $form->setDisplayNames([
+            'current_password' => '現在のパスワード',
+            'password'         => '新しいパスワード',
+            'confirm_password' => '新しいパスワード(確認)',
+        ]);
+
         if ($this->isPost()) {
+            $errors = [];
 
-            $this->form->submit($this->POST_VARS, array(
-                'new_confirm_password',
-                'new_password',
+            $form->submit($this->POST_VARS, array(
+                'current_password',
+                'password',
+                'confirm_password',
             ));
-            
-            if (!$this->form->validate()) {
-                $this->errors = $this->form->getErrors();
-                return;
+
+            if (!password_verify($form->current_password, $this->LOGIN_USER->password)) {
+                $errors[] = $form->n('current_password') . "が一致しません";
             }
 
-            $errors = [];
-            if (!password_verify($this->POST_VARS['current_password'], $this->user_info['password'])) {
-                $errors[] = "パスワードが一致しません";
+            if (!$form->validate()) {
+                $errors = array_merge($errors, $form->getErrors());
+            }
+
+            if ($errors) {
                 $this->errors = $errors;
                 return;
             }
-            
-            $password_hash = password_hash($this->POST_VARS['new_password'], PASSWORD_DEFAULT);
-            $model = MODEL('Users', $this->session->read('user_id'));
-            $model->password = $password_hash;
 
-            $model->save();
+            $form->remove('current_password');
+            $form->getModel()->unsetValue('current_password');
+            $form->remove('confirm_password');
+            $form->getModel()->unsetValue('confirm_password');
+            $form->password = password_hash($form->password, PASSWORD_DEFAULT);
+            $form->save();
 
             $this->redirect->to('a: index');
             return;
         }
-
     }
-
 }

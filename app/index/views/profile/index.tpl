@@ -5,25 +5,25 @@
     <ul>            
         <li>
             名前：
-            <?php echo h($user['name']) ?><br />
+            <?= $user->name ?><br />
             画像：
-            <?php if (!empty($user['picture'])) : ?>
-                <img src="/images/users/<?php echo h($user['picture']) ?>" width="150" height="150"><br />
-            <?php else : ?>
+            <? if (!is_empty($user->picture)) : ?>
+                <img src="/images/users/<?= $user->picture ?>" width="150" height="150"><br />
+            <? else : ?>
                 なし<br />
-            <?php endif ?>
+            <? endif ?>
             一言コメント：
-            <?php if (!empty($user['comment'])) : ?>
-                <?php echo h($user['comment']) ?><br />
-            <?php else : ?>
+            <? if (!is_empty($user->comment)) : ?>
+                <?= $user->comment ?><br />
+            <? else : ?>
                 なし<br />
-            <?php endif ?>
+            <? endif ?>
         </li>
     </ul>
-    <?php if (isset($_SESSION['user_id']) && $user['id'] === $_SESSION['user_id']['value']) : ?>
+    <? if ($IS_LOGIN && $LOGIN_USER->id === $user->id) : ?>
         <a href="/profile/edit">編集する</a><br />
         <a href="/">戻る</a>
-    <?php else : ?>
+    <? else : ?>
         <a href="/">戻る</a>
-    <?php endif ?>
+    <? endif ?>
 </body>

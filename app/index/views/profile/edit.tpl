@@ -5,26 +5,25 @@
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
     <form action="/profile/edit" method="post" enctype="multipart/form-data">
-        <p>ログインID：</p>
-        <input type="text" name="login_id" value="<?php echo h($user_info['login_id']) ?>">
-        <p>名前：</p>
-        <input type="text" name="name" value="<?php echo h($user_info['name']) ?>"><br />
-        <p>画像：</p>
-        <?php if (!empty($user_info['picture'])) : ?>
-            <img src="/images/users/<?php echo h($user_info['picture']) ?>" width="150" height="150"><br />
-        <?php else : ?>
+        <p><?= $form->n('login_id') ?>：</p>
+        <?e $form->text('login_id') ?>
+
+        <p><?= $form->n('name') ?>：</p>
+        <?e $form->text('name') ?>
+
+        <p><?= $form->n('picture') ?>：</p>
+        <?e $form->file('picture') ?><br />
+        <? if (!empty($LOGIN_USER->picture)) : ?>
+            <img src="/images/users/<?= $LOGIN_USER->picture ?>" width="150" height="150"><br />
+        <? else : ?>
             なし<br />
-        <?php endif ?>
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
-        <input type="file" name="picture"><br />
-        <p>一言コメント：</p>
-        <?php if (!empty($user_info['comment'])) : ?>
-             <input type="text" name="comment" value="<?php echo h($user_info['comment']) ?>"><br />
-        <?php else : ?>
-            <input type="text" name="comment" ><br />
-        <?php endif ?>
+        <? endif ?>
+
+        <p><?= $form->n('comment') ?>：</p>
+        <?e $form->text('comment') ?><br />
+
         <input type="submit" name="submit" value="編集する">
     </form>
     <a href="/profile/password/">パスワードを変える</a><br />    
-    <a href="/profile/index/<?php echo h($user_info['id']) ?>">戻る</a>
+    <a href="/profile/index/<?= $LOGIN_USER->id ?>">戻る</a>
 </body>
