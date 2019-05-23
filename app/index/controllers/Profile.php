@@ -26,21 +26,30 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $this->title = "プロフィール編集";
 
         $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
-
+        if (empty($this->POST_VARS['picture'])) {
+            
+        }
         if ($this->isPost()) {
-            $form->submit($this->POST_VARS, array(
-                'name',
-                'login_id',
-                'comment',
-                'picture',
-            ));
+            if (empty($this->POST_VARS['picture'])) {
+                $form->submit($this->POST_VARS, array(
+                    'name',
+                    'login_id',
+                    'comment',
+                ));
+            } else {
+                $form->submit($this->POST_VARS, array(
+                    'name',
+                    'login_id',
+                    'comment',
+                    'picture',
+                ));
+            }
 
             if (!$form->validate()) {
                 $this->errors = $form->getErrors();
                 return;
             }
 
-            // if (!empty($form->picture)) {
             if (!is_empty($form->picture)) {
                 $posted_picture = $form->picture->path;
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
