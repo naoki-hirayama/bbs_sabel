@@ -14,7 +14,7 @@ class Forms_Replies extends Form_Object
     protected $validators = array(
         'name'                  => array('required', 'validatePostNameLength'),
         'comment'               => array('required', 'validatePostCommentLength'),
-        'picture'               => array('validateImage'), //サイズのバリデーション
+        'picture'               => array('validateImage'),
         'color'                 => array('alnum'),
         'password'              => array('alnum', 'validatePasswordLength'),
     );

@@ -1,43 +1,46 @@
-    <?php if (!empty($_SESSION['user_id'])) : ?>
+    <? if ($IS_LOGIN) : ?>
         <a href="/auth/logout">ログアウト</a><br />
-    <?php else : ?>
+    <? else : ?>
         <a href="/auth/register">登録はこちらから</sa><br />
         <a href="/auth/login">ログインはこちらから</a>
-    <?php endif ?>
+    <? endif ?>
     <!--ログイン情報-->
     <partial name="shared/info" />
     <h1>投稿画面</h1>
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
-    <form action="<?php echo uri('') ?>" method="post" enctype="multipart/form-data">
-        <p>名前：<?php echo !empty($_SESSION['user_id']) ? h($user_info['name']) : ''; ?></p>
-        <?php if (!empty($_SESSION['user_id'])) : ?>
-            <input type="hidden" name="name" value="<?php echo h($user_info['name']) ?>">
-        <?php else : ?>
-            <input type="text" name="name" value="<?php echo !empty($_POST['name']) ? $_POST['name'] : '' ?>">
-        <?php endif ?>
-        <p>本文：</p>
-        <textarea name="comment" rows="4" cols="20"><?php echo !empty($_POST['comment']) ? $_POST['comment'] : '' ?></textarea><br />
-        <p>画像：</p>
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $picture_max_size ?>">
-        <input type="file" name="picture"><br />
+    <form action="<?= uri('') ?>" method="post" enctype="multipart/form-data">
+        <? if ($IS_LOGIN) : ?>
+        <p><?= $form->n('name') ?>：<?= $LOGIN_USER->name ?></p>
+        <?e $form->hidden('name', "value={$LOGIN_USER->name}") ?>
+        <? else : ?>
+        <p><?= $form->n('name') ?>：</p>
+        <?e $form->text('name') ?>
+        <? endif ?>
+
+        <p><?= $form->n('comment') ?>：</p>
+        <?e $form->textarea('comment', 'rows=4', 'ls=20') ?>
+
+        <p><?= $form->n('picture') ?>：</p>
+        <?e $form->file('picture') ?><br />
+
         <select name="color">
-        <?php foreach($select_color_options as $key => $value) : ?>
-            <?php if (!empty($_POST['color'])) : ?>
-                <option value="<?php echo $key ?>"<?php echo $key === $_POST['color'] ? 'selected' : ''; ?>>
-            <?php else : ?>
-                <option value="<?php echo $key ?>">
-            <?php endif ?>
-            <?php echo $value ?>
+        <? foreach($select_color_options as $key => $value) : ?>
+            <? if (!empty($_POST['color'])) : ?>
+                <option value="<?= $key ?>"<?= $key === $_POST['color'] ? 'selected' : '' ?>>
+            <? else : ?>
+                <option value="<?= $key ?>">
+            <? endif ?>
+            <? echo $value ?>
             </option>
-        <?php endforeach ?>
+        <? endforeach ?>
         </select><br />
-        <?php if (empty($_SESSION['user_id'])) : ?>
+        <? if (!$IS_LOGIN) : ?>
             <p>削除パスワード:</p>
-            <input type="password" name="password"><br />
-        <?php else : ?>
-            <input type="hidden" name="password">
-        <?php endif ?>
+            <?e $form->password('password') ?><br />
+        <? else : ?>
+            <?e $form->hidden('password') ?><br />
+        <? endif ?>
         <input type="submit" name="submit" value="投稿">
     </form>
     <?php if (empty($errors)) : ?>
@@ -47,38 +50,36 @@
         <if expr="$paginator->results">
             <foreach from="$paginator->results" value="$post">
                 <li>
-                    
                     ID : 
-                    <?php echo $post->id ?><br />
+                    <?= $post->id ?><br />
                     名前：
-                    <?php if (!is_null($post->user_id)) : ?>
-                        <a href="/profile/index/<?php echo $post->user_id ?>"><?php echo h($post->name) ?></a><br />
-                    <?php else : ?>
-                        <?php echo h($post->name) ?><br />
-                    <?php endif ?>
+                    <? if (!is_null($post->user_id)) : ?>
+                        <a href="/profile/index/<?e $post->user_id ?>"><?= $post->name ?></a><br />
+                    <? else : ?>
+                        <?= $post->name ?><br />
+                    <? endif ?>
                     本文：
-                    <font color="<?php echo $post->color ?>">
-                        <?php echo h($post->comment) ?>
+                    <font color="<?= $post->color ?>">
+                        <?= $post->comment ?>
                     </font><br />
                     画像：
-                    <?php if (!is_null($post->picture)) : ?>
-                        <img src="/images/posts/<?php echo h($post->picture) ?>" width="300" height="200"><br />
-                    <?php else : ?>
+                    <? if (!is_null($post->picture)) : ?>
+                        <img src="/images/posts/<?= $post->picture ?>" width="300" height="200"><br />
+                    <? else : ?>
                         なし<br />
-                    <?php endif ?>
+                    <? endif ?>
                     時間：
-                    <?php echo $post->created_at ?><br />
+                    <?=  $post->created_at ?><br />
                     レス :
-                    <a href="/reply/index/<?php echo $post->id ?>">1</a>
+                    <a href="/reply/index/<?= $post->id ?>">1</a>
                         
                     </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示 -->
-                    
-                    <?php if (!is_null($post->password) && is_null($post->user_id)) : ?>
-                        <a href="/index/delete/<?php echo $post->id ?>">削除</a><br />
-                    <?php elseif (!is_null($post->user_id) && isset($_SESSION['user_id']) && $post->user_id === $_SESSION['user_id']['value']) : ?>
-                        <a href="/index/delete/<?php echo $post->id ?>">ユーザー削除</a><br />
-                    <?php endif ?>
+                    <? if (!is_null($post->password) && is_null($post->user_id)) : ?>
+                        <a href="/index/delete/<?= $post->id ?>">削除</a><br />
+                    <? elseif (!is_null($post->user_id) && !is_null($LOGIN_USER) && $post->user_id === $LOGIN_USER->id) : ?>
+                        <a href="/index/delete/<?= $post->id ?>">ユーザー削除</a><br />
+                    <? endif ?>
                     <!--　ここまで　-->
                 
                     ---------------------------------------------<br />
@@ -89,4 +90,4 @@
         <!--ページング処理-->
         <partial name="shared/pager" />
         <!--ここまで-->
-    <?php endif ?>
+    <? endif ?>

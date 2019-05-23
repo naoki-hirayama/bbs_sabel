@@ -12,6 +12,9 @@ class Index_Controllers_Base extends Sabel_Controller_Page
         } else {
             $this->IS_LOGIN = false;
         }
+
+        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
+        $this->picture_max_size = 1 * 1024 * 1024;
     }
 
     protected function fetchLoginUser()
