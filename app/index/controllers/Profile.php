@@ -26,6 +26,8 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
         
         if ($this->isPost()) {
+            // dump($form->picture);
+            // exit;
             if (empty($this->picture)) {
                 $form->submit($this->POST_VARS, array(
                     'name',
@@ -45,7 +47,8 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 $this->errors = $form->getErrors();
                 return;
             }
-
+            // dump($this->POST_VARS);
+            // dump($form->picture);exit;//画像を投稿してもnullになる
             if (!is_empty($form->picture)) {
                 $posted_picture = $form->picture->path;
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
