@@ -40,8 +40,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $sanitized_ids) . ") GROUP BY post_id");
 
         if (!empty($tmp)) {
-            $reply_counts = array_column($tmp, 'cnt', 'post_id');
-            $this->reply_counts = $reply_counts;
+            $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
         }
 
         $this->form = $form = new Forms_Posts();
@@ -111,7 +110,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
             if (!is_null($this->post->picture)) {
                 unlink("images/posts/{$this->post->picture}");
             }
-
+            //$this->post->delete();
             $post_repleis = MODEL('Replies');
             $post_repleis->setCondition(eq('post_id', $this->param));
             $post_repleis->delete();

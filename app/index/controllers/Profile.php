@@ -26,9 +26,11 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
         
         if ($this->isPost()) {
-            dump($this->picture);
-            dump($form->picture);
-            // exit;
+            dump($this->picture);//post
+            dump($form->picture);//db
+            dump($this->name);//post
+            dump($form->name);//db
+            exit;//画像バリデーションが出る↓
             if (!empty($this->picture)) {
                 $form->submit($this->POST_VARS, array(
                     'name',
