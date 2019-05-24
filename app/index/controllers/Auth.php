@@ -8,7 +8,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->form = new Forms_Users();
 
         if ($this->IS_LOGIN) {
-            $this->redirect->uri('/'); 
+            $this->badRequest();
             return;
         }
         
@@ -18,23 +18,19 @@ class Index_Controllers_Auth extends Index_Controllers_Base
             $model->setCondition('login_id', $this->login_id);
             $user = $model->selectOne();
             
-            $errors = [];
             if (!$user->isSelected()) {
-                $errors [] = "パスワードかログインIDが違います。h";
-                $this->errors = $errors;
+                $this->errors = ["パスワードかログインIDが違います。"];
                 return;
-            } else {
-                if (!password_verify($this->password, $user->password)) {
-                    $errors[] = "パスワードかログインIDが違います。";
-                    $this->errors = $errors;
-                    return;
-                } else {
-                    $this->session->write('user_id', $user->id);
-                    $this->redirect->uri('/');
-                    return;
-                }
             }
             
+            if (!password_verify($this->password, $user->password)) {
+                $this->errors = ["パスワードかログインIDが違います。"];
+                return;
+            }
+
+            $this->session->write('user_id', $user->id);
+            $this->redirect->uri('/');
+            return;
         }
 
     }
@@ -44,7 +40,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->title = "ログアウト";
 
         if (!$this->IS_LOGIN) {
-            $this->redirect->uri('/');
+            $this->badRequest();
             return;
         }
 
@@ -56,7 +52,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->title = "登録画面";
         
         if ($this->IS_LOGIN) {
-            $this->redirect->uri('/');
+            $this->badRequest();
             return;
         }
 
@@ -90,6 +86,10 @@ class Index_Controllers_Auth extends Index_Controllers_Base
     public function registered()
     {
         $this->title = "登録完了";
+        if (!$this->IS_LOGIN) {
+            $this->badRequest();
+            return;
+        }
     }
 
 

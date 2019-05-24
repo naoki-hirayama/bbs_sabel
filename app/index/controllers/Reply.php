@@ -5,8 +5,13 @@ class Index_Controllers_Reply extends Index_Controllers_Base
     public function index()
     {
         $this->title = "レス一覧";
-
+        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
         $this->post = MODEL('Posts', $this->param);
+
+        if (!$this->post->isSelected()) {
+            $this->notFound();
+            return;
+        }
 
         $model = MODEL('Replies');
         $model->setCondition('post_id', $this->param);
@@ -55,35 +60,34 @@ class Index_Controllers_Reply extends Index_Controllers_Base
     public function delete()
     {
         $this->title = "レス削除";
-
+        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
 
         $this->post = MODEL('Replies', $this->param);
 
         if (!$this->post->isSelected()) {
-            $this->redirect->uri('/');
+            $this->notFound();
             return;
         }
 
-        if ($this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
-            $this->redirect->uri('/');
-            return;
+        if (!is_null($this->post->user_id)) {
+            if ($this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
+                $this->badRequest();
+                return;
+            }
         }
 
         if ($this->isPost()) {
 
-            if ($this->post->password !== $this->POST_VARS['password_input']) {
-
-                $errors = [];
-                $errors[] = "パスワードが違います。";
-                $this->errors = $errors;
+            if ($this->post->password !== $this->password_input) {
+                $this->errors = ["パスワードが違います。"];
                 return;
             }
-
-            $this->post->delete();
-
+            //トランザクション
+            
             if (!is_null($this->post->picture)) {
                 unlink("images/replies/{$this->post->picture}");
             }
+            $this->post->delete();
 
             $this->redirect->to("reply/deleted/{$this->post->post_id}");
             return;

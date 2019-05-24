@@ -5,6 +5,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function index()
     {
         $this->title = "投稿一覧";
+        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
         $per_page_records = 4;
         $paginator = new Paginator('Posts');
         $paginator->setDefaultOrder('id', 'desc');
@@ -18,7 +19,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $user_ids[] = $post->user_id;
             }
         }
-    
+
         if (!empty($user_ids)) {
             $sanitized_ids = [];
             foreach ($user_ids as $user_id) {
@@ -26,6 +27,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
             }
 
             $users = db_query("SELECT * FROM users WHERE id IN (" . implode(',', $sanitized_ids) . ")");
+
             $user_names = array_column($users, 'name', 'id');
             $this->user_names = $user_names;
         }
@@ -36,13 +38,16 @@ class Index_Controllers_Index extends Index_Controllers_Base
         }
 
         $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $sanitized_ids) . ") GROUP BY post_id");
-        
-        $reply_counts = array_column($tmp, 'cnt', 'post_id');
-        $this->reply_counts = $reply_counts;
+
+        if (!empty($tmp)) {
+            $reply_counts = array_column($tmp, 'cnt', 'post_id');
+            $this->reply_counts = $reply_counts;
+        }
+
         $this->form = $form = new Forms_Posts();
 
         if ($this->isPost()) {
-            
+
             $form->submit($this->POST_VARS, array(
                 'name',
                 'comment',
@@ -50,7 +55,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 'picture',
                 'password',
             ));
-            
+
             if (!$form->validate()) {
                 $this->errors = $form->getErrors();
                 return;
@@ -67,9 +72,8 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 move_uploaded_file( $posted_picture, $rename_file_path);
                 $form->picture = $rename_file;
             }
-
+            
             $form->user_id = $this->LOGIN_USER->id;
-
             $form->save();
             $this->redirect->to('a: send');
             return;
@@ -84,31 +88,26 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function delete()
     {
         $this->title = '削除ページ';
-
+        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
         $this->post = MODEL('Posts', $this->param);
 
         if (!$this->post->isSelected()) {
-            $this->redirect->uri('/');
+            $this->notFound();
             return;
         }
 
         if ($this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
-            $this->redirect->uri('/');
+            $this->badRequest();
             return;
         }
-        
+
         if ($this->isPost()) {
 
-            if ($this->post->password !== $this->POST_VARS['password_input']) {
-
-                $errors = [];
-                $errors[] = "パスワードが違います。";
-                $this->errors = $errors;
+            if ($this->post->password !== $this->password_input) {
+                $this->errors = ["パスワードが違います。"];
                 return;
             }
-
-            $this->post->delete();
-
+            //トランザクション
             if (!is_null($this->post->picture)) {
                 unlink("images/posts/{$this->post->picture}");
             }
@@ -117,6 +116,8 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $post_repleis->setCondition(eq('post_id', $this->param));
             $post_repleis->delete();
 
+            $this->post->delete();
+            //ここまで
             $this->redirect->to('a: deleted');
             return;
         }

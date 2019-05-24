@@ -71,10 +71,15 @@
                     時間：
                     <?=  $post->created_at ?><br />
                     レス :
-                    <a href="/reply/index/<?= $post->id ?>">
-                    <?php echo $reply_counts[$post->id] ?>
-                    <?php (!is_null($reply_counts[$post->id])) ? $reply_counts[$post->id] : 0 ?>件
-                    </a><br />
+                    <? if (!empty($reply_counts[$post->id])) : ?>
+                        <a href="/reply/index/<?= $post->id ?>">
+                        <?= $reply_counts[$post->id] ?>件
+                        </a><br />
+                    <? else : ?>
+                        <a href="/reply/index/<?= $post->id ?>">
+                        0件
+                        </a><br />
+                    <? endif ?>
                     <!--if文でパスワードが設定されていなかったら非表示 -->
                     <? if (!is_null($post->password) && is_null($post->user_id)) : ?>
                         <a href="/index/delete/<?= $post->id ?>">削除</a><br />

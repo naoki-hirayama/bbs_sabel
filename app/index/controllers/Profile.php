@@ -6,12 +6,10 @@ class Index_Controllers_Profile extends Index_Controllers_Base
     {
         $this->title = "プロフィール";
 
-        //パラメーターからuser情報を取得
         $this->user = MODEL('Users', $this->param);
 
-        //存在しないidの場合リダイレクト
         if (!$this->user->isSelected()) {
-            $this->redirect->uri('/');
+            $this->notFound();
             return;
         }
     }
@@ -19,18 +17,16 @@ class Index_Controllers_Profile extends Index_Controllers_Base
     public function edit()
     {
         if (!$this->IS_LOGIN) {
-            $this->redirect->uri('/');
+            $this->badRequest();
             return;
         }
 
         $this->title = "プロフィール編集";
 
         $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
-        if (empty($this->POST_VARS['picture'])) {
-            
-        }
+        
         if ($this->isPost()) {
-            if (empty($this->POST_VARS['picture'])) {
+            if (empty($this->picture)) {
                 $form->submit($this->POST_VARS, array(
                     'name',
                     'login_id',
@@ -70,7 +66,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
 
             $form->save();
 
-            $this->redirect->to('a: index');
+            $this->redirect->to("profile/index/{$this->LOGIN_USER->id}");
             return;
         }
     }
@@ -78,7 +74,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
     public function password()
     {
         if (!$this->IS_LOGIN) {
-            $this->redirect->uri('/');
+            $this->badRequest();
             return;
         }
 
@@ -120,7 +116,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
             $form->password = password_hash($form->password, PASSWORD_DEFAULT);
             $form->save();
 
-            $this->redirect->to('a: index');
+            $this->redirect->to('a: index c: edit');
             return;
         }
     }
