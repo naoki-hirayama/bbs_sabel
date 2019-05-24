@@ -9,7 +9,7 @@
             名前：
             <? if (!is_null($post->user_id)) : ?>
                 <a href="/profile/index/<?= $post->user_id ?>">
-                    <?= $post->name ?>
+                    <?= $user_name->name ?>
                 </a><br />
             <? else : ?>
                 <?= $post->name ?><br />

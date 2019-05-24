@@ -26,12 +26,16 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
         
         if ($this->isPost()) {
+            dump(is_null($this->hoge));
+            dump(is_null($this->comment));
+            dump(is_null($this->picture));
+            dump(is_null($form->picture));
             dump($this->picture);//post
             dump($form->picture);//db
             dump($this->name);//post
             dump($form->name);//db
-            exit;//画像バリデーションが出る↓
-            if (!empty($this->picture)) {
+            // exit;
+            if (is_null($this->picture)) {
                 $form->submit($this->POST_VARS, array(
                     'name',
                     'login_id',
@@ -52,7 +56,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
             }
             // dump($this->POST_VARS);
             //dump(empty($this->picture));exit;//画像を投稿してもnullになる
-            if (empty($this->picture)) {
+            if (!is_null($this->picture)) {
                 $posted_picture = $form->picture->path;
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                 $picture_type = $finfo->file($posted_picture);
@@ -61,7 +65,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 $rename_file_path = 'images/users/' . $rename_file;
                 move_uploaded_file($posted_picture, $rename_file_path);
 
-                if (!empty($this->LOGIN_USER->picture)) {
+                if (!is_null($this->LOGIN_USER->picture)) {
                     unlink("images/users/{$this->LOGIN_USER->picture}");
                 }
 

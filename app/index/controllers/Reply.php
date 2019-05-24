@@ -7,6 +7,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
         $this->title = "レス一覧";
         $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
         $this->post = MODEL('Posts', $this->param);
+        $this->user_name = MODEL('Users', $this->post->user_id);
 
         if (!$this->post->isSelected()) {
             $this->notFound();

@@ -14,7 +14,7 @@
             </font><br />
             画像：
             <?php if (!is_null($post->picture)) : ?>
-                <img src="/images/posts/<?= $post->picture ?>" width="300" height="200"><br />
+                <img src="/images/replies/<?= $post->picture ?>" width="300" height="200"><br />
             <?php else : ?>
                 なし<br />
             <?php endif ?>
