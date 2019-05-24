@@ -116,7 +116,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
             $form->password = password_hash($form->password, PASSWORD_DEFAULT);
             $form->save();
 
-            $this->redirect->to('a: index c: edit');
+            $this->redirect->to('profile/edit');
             return;
         }
     }
