@@ -23,9 +23,9 @@ class Forms_Posts extends  Form_Model
     {
         if (!is_empty($value)) {
             if (mb_strlen($value, 'UTF-8') < Posts::MIN_PASSWORD_LENGTH) {
-                return $this->getDisplayName($name) . "は" . Posts::MIN_PASSWORD_LENGTH . "文字以上です。";
+                return $this->getDisplayName($name) . "は" . Posts::MIN_PASSWORD_LENGTH . "文字以上" . Posts::MAX_PASSWORD_LENGTH . " 文字以内です。 ";
             } else if (mb_strlen($value) > Posts::MAX_PASSWORD_LENGTH) {
-                return $this->getDisplayName($name) . "は" . Posts::MAX_PASSWORD_LENGTH . "文字以内です。";
+                return $this->getDisplayName($name) . "は" . Posts::MIN_PASSWORD_LENGTH . "文字以上" . Posts::MAX_PASSWORD_LENGTH . " 文字以内です。 ";
             }
         }
     }

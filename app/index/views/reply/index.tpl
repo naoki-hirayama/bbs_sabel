@@ -72,35 +72,35 @@
         <h2>レス一覧</h2>
         <p>総レス数：<?= $total_replies ?>件</p>
         <ul>
-        <?php if ($reply_posts) : ?>
-            <?php foreach ($reply_posts as $reply_post) : ?>
+        <?php if ($replies) : ?>
+            <?php foreach ($replies as $reply) : ?>
                 <li>
                     ID : 
-                    <?= $reply_post->id ?><br />
+                    <?= $reply->id ?><br />
                     名前：
-                    <? if (!is_null($reply_post->user_id)) : ?>
-                        <a href="/profile/index/<?e $post->user_id ?>"><?= $reply_post->name ?></a><br />
+                    <? if (!is_null($reply->user_id)) : ?>
+                        <a href="/profile/index/<?e $post->user_id ?>"><?= $reply->name ?></a><br />
                     <? else : ?>
-                        <?= $reply_post->name ?><br />
+                        <?= $reply->name ?><br />
                     <? endif ?>
                     本文：
-                    <font color="<?= $reply_post->color ?>">
-                        <?= $reply_post->comment ?>
+                    <font color="<?= $reply->color ?>">
+                        <?= $reply->comment ?>
                     </font><br />
                     画像：
-                    <? if (!is_null($reply_post->picture)) : ?>
-                        <img src="/images/replies/<?= $reply_post->picture ?>" width="300" height="200"><br />
+                    <? if (!is_null($reply->picture)) : ?>
+                        <img src="/images/replies/<?= $reply->picture ?>" width="300" height="200"><br />
                     <? else : ?>
                         なし<br />
                     <? endif ?>
                     時間：
-                    <?=  $reply_post->created_at ?><br />
+                    <?=  $reply->created_at ?><br />
                     
                     <!--if文でパスワードが設定されていなかったら非表示 -->
-                    <? if (!is_null($reply_post->password) && is_null($reply_post->user_id)) : ?>
-                        <a href="/reply/delete/<?= $reply_post->id ?>">削除</a><br />
-                    <? elseif (!is_null($reply_post->user_id) && !is_null($LOGIN_USER) && $reply_post->user_id === $LOGIN_USER->id) : ?>
-                        <a href="/reply/delete/<?= $reply_post->id ?>">ユーザー削除</a><br />
+                    <? if (!is_null($reply->password) && is_null($reply->user_id)) : ?>
+                        <a href="/reply/delete/<?= $reply->id ?>">削除</a><br />
+                    <? elseif (!is_null($reply->user_id) && !is_null($LOGIN_USER) && $reply->user_id === $LOGIN_USER->id) : ?>
+                        <a href="/reply/delete/<?= $reply->id ?>">ユーザー削除</a><br />
                     <? endif ?>
                     <!--　ここまで　-->
                 

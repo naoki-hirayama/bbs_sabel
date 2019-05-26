@@ -8,7 +8,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->form = new Forms_Users();
 
         if ($this->IS_LOGIN) {
-            $this->badRequest();
+            $this->redirect->uri('/');
             return;
         }
         
@@ -22,7 +22,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
                 $this->errors = ["パスワードかログインIDが違います。"];
                 return;
             }
-            
+
             if (!password_verify($this->password, $user->password)) {
                 $this->errors = ["パスワードかログインIDが違います。"];
                 return;
@@ -40,7 +40,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->title = "ログアウト";
 
         if (!$this->IS_LOGIN) {
-            $this->badRequest();
+            $this->redirect->to('a: login');
             return;
         }
 
@@ -52,7 +52,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->title = "登録画面";
         
         if ($this->IS_LOGIN) {
-            $this->badRequest();
+            $this->redirect->uri('/');
             return;
         }
 
@@ -87,7 +87,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
     {
         $this->title = "登録完了";
         if (!$this->IS_LOGIN) {
-            $this->badRequest();
+            $this->redirect->to('a: login');
             return;
         }
     }

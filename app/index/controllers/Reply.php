@@ -5,7 +5,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
     public function index()
     {
         $this->title = "レス一覧";
-        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
+        $this->select_color_options = Replies::getSelectColorOptions();
         $this->post = MODEL('Posts', $this->param);
         $this->user_name = MODEL('Users', $this->post->user_id);
 
@@ -17,7 +17,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
         $model = MODEL('Replies');
         $model->setCondition('post_id', $this->param);
         $model->setOrderBy('id', 'desc');
-        $this->reply_posts = $model->select();
+        $this->replies = $model->select();//count
         $this->total_replies = $model->setCondition('post_id', $this->param)->getCount();
 
         $this->form = $form = new Forms_Replies();
@@ -53,7 +53,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             $form->post_id = $this->post->id;
 
             $form->save();
-            $this->redirect->to("reply/index/{$this->post->id}");
+            $this->redirect->to("a: index, p: {$this->post->id}");
             return;
         }
     }
@@ -61,17 +61,17 @@ class Index_Controllers_Reply extends Index_Controllers_Base
     public function delete()
     {
         $this->title = "レス削除";
-        $this->select_color_options = ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
+        $this->select_color_options = Replies::getSelectColorOptions();
 
-        $this->post = MODEL('Replies', $this->param);
+        $this->reply = MODEL('Replies', $this->param);
 
-        if (!$this->post->isSelected()) {
+        if (!$this->reply->isSelected()) {
             $this->notFound();
             return;
         }
 
-        if (!is_null($this->post->user_id)) {
-            if ($this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
+        if (!is_null($this->reply->user_id)) {
+            if ($this->reply->user_id !== $this->LOGIN_USER->id && $this->reply->password === null) {
                 $this->badRequest();
                 return;
             }
@@ -79,18 +79,18 @@ class Index_Controllers_Reply extends Index_Controllers_Base
 
         if ($this->isPost()) {
 
-            if ($this->post->password !== $this->password_input) {
+            if ($this->reply->password !== $this->password_input) {
                 $this->errors = ["パスワードが違います。"];
                 return;
             }
             //トランザクション
             
-            if (!is_null($this->post->picture)) {
-                unlink("images/replies/{$this->post->picture}");
+            if (!is_null($this->reply->picture)) {
+                unlink("images/replies/{$this->reply->picture}");
             }
-            $this->post->delete();
+            $this->reply->delete();
 
-            $this->redirect->to("reply/deleted/{$this->post->post_id}");
+            $this->redirect->to("a: deleted, param: {$this->reply->post_id}");
             return;
         }
     }

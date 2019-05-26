@@ -7,22 +7,22 @@
     <ul>
         <li>
             名前：
-            <?= $post->name ?><br />
+            <?= $reply->name ?><br />
             本文：
-            <font color="<?= $post->color ?>">
-                <?= $post->comment ?>
+            <font color="<?= $reply->color ?>">
+                <?= $reply->comment ?>
             </font><br />
             画像：
-            <?php if (!is_null($post->picture)) : ?>
-                <img src="/images/replies/<?= $post->picture ?>" width="300" height="200"><br />
+            <?php if (!is_null($reply->picture)) : ?>
+                <img src="/images/replies/<?= $reply->picture ?>" width="300" height="200"><br />
             <?php else : ?>
                 なし<br />
             <?php endif ?>
             時間：
-            <?= $post->created_at ?><br />
+            <?= $reply->created_at ?><br />
             ---------------------------------------------<br />
             <form action="<?= uri('') ?>" method="post">
-            <?php if ($post->password !== null) : ?>
+            <?php if ($reply->password !== null) : ?>
                 <p>削除パスワード:</p>
                 <input type="password" name="password_input"><br />
                 <input type="submit" value="削除"/><br />

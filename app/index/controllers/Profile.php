@@ -26,16 +26,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         $this->form = $form = new Forms_Users($this->LOGIN_USER->id);
         
         if ($this->isPost()) {
-            dump(is_null($this->hoge));
-            dump(is_null($this->comment));
-            dump(is_null($this->picture));
-            dump(is_null($form->picture));
-            dump($this->picture);//post
-            dump($form->picture);//db
-            dump($this->name);//post
-            dump($form->name);//db
-            // exit;
-            if (is_null($this->picture)) {
+            if (is_empty($this->picture)) {
                 $form->submit($this->POST_VARS, array(
                     'name',
                     'login_id',
@@ -54,9 +45,8 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 $this->errors = $form->getErrors();
                 return;
             }
-            // dump($this->POST_VARS);
-            //dump(empty($this->picture));exit;//画像を投稿してもnullになる
-            if (!is_null($this->picture)) {
+            
+            if (!is_empty($this->picture)) {
                 $posted_picture = $form->picture->path;
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                 $picture_type = $finfo->file($posted_picture);
@@ -70,13 +60,11 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 }
 
                 $form->picture = $rename_file;
-            } else {
-                $form->picture = $this->LOGIN_USER->picture;
             }
 
             $form->save();
 
-            $this->redirect->to("profile/index/{$this->LOGIN_USER->id}");
+            $this->redirect->to("a: index, param: {$this->LOGIN_USER->id}");
             return;
         }
     }
@@ -84,7 +72,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
     public function password()
     {
         if (!$this->IS_LOGIN) {
-            $this->badRequest();
+            $this->redirect->to('/');
             return;
         }
 
@@ -96,6 +84,8 @@ class Index_Controllers_Profile extends Index_Controllers_Base
             'password'         => '新しいパスワード',
             'confirm_password' => '新しいパスワード(確認)',
         ]);
+
+        $form->password = '';
 
         if ($this->isPost()) {
             $errors = [];
@@ -126,7 +116,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
             $form->password = password_hash($form->password, PASSWORD_DEFAULT);
             $form->save();
 
-            $this->redirect->to('profile/edit');
+            $this->redirect->to('a: edit');
             return;
         }
     }
