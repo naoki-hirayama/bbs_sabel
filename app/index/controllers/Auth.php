@@ -14,10 +14,10 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         
         if ($this->isPost()) {
             
-            $model = MODEL('Users');
-            $model->setCondition('login_id', $this->login_id);
-            $user = $model->selectOne();
-            
+            $user = finder("Users")
+                ->eq('login_id', $this->login_id)
+                ->fetch();
+               
             if (!$user->isSelected()) {
                 $this->errors = ["パスワードかログインIDが違います。"];
                 return;
@@ -87,11 +87,8 @@ class Index_Controllers_Auth extends Index_Controllers_Base
     {
         $this->title = "登録完了";
         if (!$this->IS_LOGIN) {
-            $this->redirect->to('a: login');
+            $this->redirect->to('a: register');
             return;
         }
     }
-
-
-    
 }
