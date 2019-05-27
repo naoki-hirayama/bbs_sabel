@@ -4,7 +4,7 @@
     <partial name="shared/info" />
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
-    <form action="/profile/edit" method="post" enctype="multipart/form-data">
+    <form action="<?= uri('') ?>" method="post" enctype="multipart/form-data">
         <p><?= $form->n('login_id') ?>：</p>
         <?e $form->text('login_id') ?>
 
@@ -24,6 +24,6 @@
 
         <input type="submit" name="submit" value="編集する">
     </form>
-    <a href="/profile/password/">パスワードを変える</a><br />    
-    <a href="/profile/index/<?= $LOGIN_USER->id ?>">戻る</a>
+    <a href="<?= uri('a: password') ?>">パスワードを変える</a><br />    
+    <a href="<?= uri("c: profile, a: index, param: {$LOGIN_USER->id}") ?>">戻る</a>
 </body>

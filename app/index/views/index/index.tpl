@@ -25,16 +25,17 @@
         <?e $form->file('picture') ?><br />
 
         <select name="color">
-        <? foreach($select_color_options as $key => $value) : ?>
-            <? if (!empty($_POST['color'])) : ?>
-                <option value="<?= $key ?>"<?= $key === $_POST['color'] ? 'selected' : '' ?>>
+        <? foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
+            <? if (!is_empty($form->color)) : ?>
+                <option value="<?= $key ?>"<?= $key === $form->color ? 'selected' : '' ?>>
             <? else : ?>
                 <option value="<?= $key ?>">
             <? endif ?>
-            <? echo $value ?>
+            <?= $value ?>
             </option>
         <? endforeach ?>
         </select><br />
+
         <? if (!$IS_LOGIN) : ?>
             <p>削除パスワード:</p>
             <?e $form->password('password') ?><br />
@@ -53,8 +54,8 @@
                     ID : 
                     <?= $post->id ?><br />
                     名前：
-                    <? if (!is_null($post->user_id)) : ?>
-                        <a href="/profile/index/<?= $post->user_id ?>"><?= $user_names[$post->user_id] ?></a><br />
+                    <? if (!is_empty($post->user_id)) : ?>
+                        <a href="<?= uri("c: profile, a: index, param: {$post->user_id}") ?>"><?= $user_names[$post->user_id] ?></a><br />
                     <? else : ?>
                         <?= $post->name ?><br />
                     <? endif ?>
@@ -72,19 +73,19 @@
                     <?=  $post->created_at ?><br />
                     レス :
                     <? if (!empty($reply_counts[$post->id])) : ?>
-                        <a href="/reply/index/<?= $post->id ?>">
+                        <a href="<?= uri("c: reply, a: index, param: {$post->id}") ?>">
                         <?= $reply_counts[$post->id] ?>件
                         </a><br />
                     <? else : ?>
-                        <a href="/reply/index/<?= $post->id ?>">
+                        <a href="<?= uri("c: reply, a: index, param: {$post->id}") ?>">
                         0件
                         </a><br />
                     <? endif ?>
                     <!--if文でパスワードが設定されていなかったら非表示 -->
                     <? if (!is_null($post->password) && is_null($post->user_id)) : ?>
-                        <a href="/index/delete/<?= $post->id ?>">削除</a><br />
+                        <a href="<?= uri("a: delete, param: {$post->id}") ?>">削除</a><br />
                     <? elseif (!is_null($post->user_id) && !is_null($LOGIN_USER) && $post->user_id === $LOGIN_USER->id) : ?>
-                        <a href="/index/delete/<?= $post->id ?>">ユーザー削除</a><br />
+                        <a href="<?= uri("a: delete, param: {$post->id}") ?>">ユーザー削除</a><br />
                     <? endif ?>
                     <!--　ここまで　-->
                 

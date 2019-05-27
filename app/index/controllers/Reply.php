@@ -7,8 +7,8 @@ class Index_Controllers_Reply extends Index_Controllers_Base
         $this->title = "レス一覧";
         $this->select_color_options = Replies::getSelectColorOptions();
         $this->post = MODEL('Posts', $this->param);
-        $this->user_name = MODEL('Users', $this->post->user_id);
-
+        $this->user = MODEL('Users', $this->post->user_id);
+        
         if (!$this->post->isSelected()) {
             $this->notFound();
             return;
@@ -49,8 +49,11 @@ class Index_Controllers_Reply extends Index_Controllers_Base
                 move_uploaded_file($posted_picture, $rename_file_path);
                 $form->picture = $rename_file;
             }
+            if (!is_empty($this->LOGIN_USER->id)) {
+                $form->user_id = $this->LOGIN_USER->id;
+            }
+                
 
-            $form->user_id = $this->LOGIN_USER->id;
             $form->post_id = $this->post->id;
 
             $form->save();
@@ -71,12 +74,12 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             return;
         }
 
-        if (!is_null($this->reply->user_id)) {
-            if ($this->reply->user_id !== $this->LOGIN_USER->id && $this->reply->password === null) {
-                $this->badRequest();
-                return;
-            }
+        
+        if (!is_empty($this->LOGIN_USER->id) && $this->reply->user_id !== $this->LOGIN_USER->id && $this->reply->password === null) {
+            $this->notFound();
+            return;
         }
+
 
         if ($this->isPost()) {
 

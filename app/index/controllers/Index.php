@@ -6,7 +6,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
     {
         $this->title = "投稿一覧";
         $this->select_color_options = Posts::getSelectColorOptions();
-        $per_page_records = 4;
+        $per_page_records = 3;
         $paginator = new Paginator('Posts');
         $paginator->setDefaultOrder('id', 'desc');
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
@@ -21,18 +21,21 @@ class Index_Controllers_Index extends Index_Controllers_Base
         }
         
         if (!is_empty($user_ids)) {
-            $users = finder('Users')
+            $this->user_names = finder('Users')
                      ->in('id', $user_ids)
                      ->sort('id', 'desc')
-                     ->fetchArray();
-
-            $this->user_names = array_column($users, 'name', 'id');
+                     ->fetchArray('name');
         }
+        
+        if (!is_empty($post_ids)) {
+            $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $post_ids) . ") GROUP BY post_id");
 
-        $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $post_ids) . ") GROUP BY post_id");
+            if (!is_empty($tmp)) {
+                $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
+            }
 
-        if (!is_empty($tmp)) {
-            $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
+        } else {
+            $this->reply_counts = null;
         }
 
         $this->form = $form = new Forms_Posts();
@@ -63,8 +66,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 move_uploaded_file( $posted_picture, $rename_file_path);
                 $form->picture = $rename_file;
             }
-            
-            $form->user_id = $this->LOGIN_USER->id;
+            if (!is_empty($this->LOGIN_USER->id)) {
+                $form->user_id = $this->LOGIN_USER->id;
+            }
             $form->save();
             $this->redirect->to('a: sent');
             return;
@@ -83,12 +87,12 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $this->post = MODEL('Posts', $this->param);
 
         if (!$this->post->isSelected()) {
-            $this->redirect->to('/');
+            $this->notFound();
             return;
         }
 
-        if ($this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
-            $this->badRequest();
+        if (!is_empty($this->LOGIN_USER->id) && $this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
+            $this->notFound();
             return;
         }
 

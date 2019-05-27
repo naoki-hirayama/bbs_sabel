@@ -4,14 +4,14 @@ class Config_Map extends Sabel_Map_Configurator
 {
   public function configure()
   {
-        //   if (is_cli() === true) {
-        //       $this->route("batch")
-        //           ->uri("batch/:controller/:action/:param")
-        //           ->module("batch")
-        //           ->defaults(array(
-        //               "param" => null,
-        //           ));
-        //   }
+      // if (is_cli() === true) {
+      //   $this->route("batch")
+      //     ->uri("batch/:controller/:action/:param")
+      //     ->module("batch")
+      //     ->defaults(array(
+      //       "param" => null,
+      //     ));
+      // }
 
         // $this->route("login")->uri("login/:action")->module("index")->controller("login")->defaults(array(":action" => "index"));
         // $this->route("logout")->uri("logout")->module("index")->controller("login")->action("logout");

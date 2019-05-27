@@ -8,8 +8,8 @@
             <?= $post->id ?><br />
             名前：
             <? if (!is_null($post->user_id)) : ?>
-                <a href="/profile/index/<?= $post->user_id ?>">
-                    <?= $user_name->name ?>
+                <a href="<?= uri("c: profile, a: index, param: {$post->user_id}") ?>">
+                    <?= $user->name ?>
                 </a><br />
             <? else : ?>
                 <?= $post->name ?><br />
@@ -48,13 +48,13 @@
         <?e $form->file('picture') ?><br />
 
         <select name="color">
-        <? foreach($select_color_options as $key => $value) : ?>
-            <? if (!empty($_POST['color'])) : ?>
-                <option value="<?= $key ?>"<?= $key === $_POST['color'] ? 'selected' : '' ?>>
+        <? foreach(Replies::getSelectColorOptions() as $key => $value) : ?>
+            <? if (!is_empty($form->color)) : ?>
+                <option value="<?= $key ?>"<?= $key === $form->color ? 'selected' : '' ?>>
             <? else : ?>
                 <option value="<?= $key ?>">
             <? endif ?>
-            <? echo $value ?>
+            <?= $value ?>
             </option>
         <? endforeach ?>
         </select>
@@ -79,7 +79,7 @@
                     <?= $reply->id ?><br />
                     名前：
                     <? if (!is_null($reply->user_id)) : ?>
-                        <a href="/profile/index/<?e $post->user_id ?>"><?= $reply->name ?></a><br />
+                        <a href="<?= uri("c: profile, a: index, param: {$post->user_id}") ?>"><?= $reply->name ?></a><br />
                     <? else : ?>
                         <?= $reply->name ?><br />
                     <? endif ?>
@@ -97,10 +97,11 @@
                     <?=  $reply->created_at ?><br />
                     
                     <!--if文でパスワードが設定されていなかったら非表示 -->
+                    
                     <? if (!is_null($reply->password) && is_null($reply->user_id)) : ?>
-                        <a href="/reply/delete/<?= $reply->id ?>">削除</a><br />
+                        <a href="<?= uri("a: delete, param: {$reply->id}") ?>">削除</a><br />
                     <? elseif (!is_null($reply->user_id) && !is_null($LOGIN_USER) && $reply->user_id === $LOGIN_USER->id) : ?>
-                        <a href="/reply/delete/<?= $reply->id ?>">ユーザー削除</a><br />
+                        <a href="<?= uri("a: delete, param: {$reply->id}") ?>">ユーザー削除</a><br />
                     <? endif ?>
                     <!--　ここまで　-->
                 
