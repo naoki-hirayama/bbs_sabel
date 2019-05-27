@@ -14,11 +14,12 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             return;
         }
 
-        $model = MODEL('Replies');
-        $model->setCondition('post_id', $this->param);
-        $model->setOrderBy('id', 'desc');
-        $this->replies = $model->select();//count
-        $this->total_replies = $model->setCondition('post_id', $this->param)->getCount();
+        $this->replies = finder('Replies')
+                         ->eq('post_id', $this->param)
+                         ->sort('id', 'desc')
+                         ->fetchAll();
+
+        $this->total_replies = count($this->replies);
 
         $this->form = $form = new Forms_Replies();
 
@@ -85,7 +86,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             }
             //トランザクション
             
-            if (!is_null($this->reply->picture)) {
+            if (!is_empty($this->reply->picture)) {
                 unlink("images/replies/{$this->reply->picture}");
             }
             $this->reply->delete();
