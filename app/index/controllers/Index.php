@@ -99,10 +99,6 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 return;
             }
             //トランザクション
-            if (!is_empty($this->post->picture)) {
-                unlink("images/posts/{$this->post->picture}");
-            }
-
             $replies = finder('Replies')
                        ->eq('post_id', $this->param)
                        ->fetchArray();
@@ -116,10 +112,12 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $post_repleis = MODEL('Replies');
             $post_repleis->setCondition(eq('post_id', $this->param));
             $post_repleis->delete();
+
+            if (!is_empty($this->post->picture)) {
+                unlink("images/posts/{$this->post->picture}");
+            }
             $this->post->delete();
 
-            
-            //ここまで
             $this->redirect->to('a: deleted');
             return;
         }
