@@ -5,7 +5,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
     public function index()
     {
         $this->title = "レス一覧";
-        $this->select_color_options = Replies::getSelectColorOptions();
+        
         $this->post = MODEL('Posts', $this->param);
         $this->user = MODEL('Users', $this->post->user_id);
         
@@ -49,7 +49,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
                 move_uploaded_file($posted_picture, $rename_file_path);
                 $form->picture = $rename_file;
             }
-            if (!is_empty($this->LOGIN_USER->id)) {
+            if ($this->IS_LOGIN) {
                 $form->user_id = $this->LOGIN_USER->id;
             }
                 
@@ -65,7 +65,6 @@ class Index_Controllers_Reply extends Index_Controllers_Base
     public function delete()
     {
         $this->title = "レス削除";
-        $this->select_color_options = Replies::getSelectColorOptions();
 
         $this->reply = MODEL('Replies', $this->param);
 
@@ -74,12 +73,20 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             return;
         }
 
-        
-        if (!is_empty($this->LOGIN_USER->id) && $this->reply->user_id !== $this->LOGIN_USER->id && $this->reply->password === null) {
+        if (is_empty($this->reply->password) && is_empty($this->reply->user_id)) {
             $this->notFound();
             return;
         }
 
+        if ($this->IS_LOGIN && $this->reply->user_id !== $this->LOGIN_USER->id && is_empty($this->reply->password)) {
+            $this->notFound();
+            return;
+        }
+
+        if (!$this->IS_LOGIN && !is_empty($this->reply->user_id)) {
+            $this->notFound();
+            return;
+        }
 
         if ($this->isPost()) {
 

@@ -5,7 +5,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function index()
     {
         $this->title = "投稿一覧";
-        $this->select_color_options = Posts::getSelectColorOptions();
+        
         $per_page_records = 3;
         $paginator = new Paginator('Posts');
         $paginator->setDefaultOrder('id', 'desc');
@@ -26,17 +26,14 @@ class Index_Controllers_Index extends Index_Controllers_Base
                      ->sort('id', 'desc')
                      ->fetchArray('name');
         }
-        
+
         if (!is_empty($post_ids)) {
             $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $post_ids) . ") GROUP BY post_id");
 
             if (!is_empty($tmp)) {
                 $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
             }
-
-        } else {
-            $this->reply_counts = null;
-        }
+        } 
 
         $this->form = $form = new Forms_Posts();
 
@@ -66,9 +63,11 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 move_uploaded_file( $posted_picture, $rename_file_path);
                 $form->picture = $rename_file;
             }
-            if (!is_empty($this->LOGIN_USER->id)) {
+
+            if ($this->IS_LOGIN) {
                 $form->user_id = $this->LOGIN_USER->id;
             }
+            
             $form->save();
             $this->redirect->to('a: sent');
             return;
@@ -90,8 +89,18 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $this->notFound();
             return;
         }
+        
+        if (is_empty($this->post->password) && is_empty($this->post->user_id)) {
+            $this->notFound();
+            return; 
+        }
+        
+        if ($this->IS_LOGIN && $this->post->user_id !== $this->LOGIN_USER->id && is_empty($this->post->password)) {
+            $this->notFound();
+            return;
+        }
 
-        if (!is_empty($this->LOGIN_USER->id) && $this->post->user_id !== $this->LOGIN_USER->id && $this->post->password === null) {
+        if(!$this->IS_LOGIN && !is_empty($this->post->user_id)) {
             $this->notFound();
             return;
         }

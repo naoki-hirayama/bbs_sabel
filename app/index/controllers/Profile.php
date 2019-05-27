@@ -17,7 +17,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
     public function edit()
     {
         if (!$this->IS_LOGIN) {
-            $this->redirect->to('c:Auth, a: login');
+            $this->redirect->to('c:auth, a: login');
             return;
         }
 
@@ -72,7 +72,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
     public function password()
     {
         if (!$this->IS_LOGIN) {
-            $this->redirect->to('c:Auth, a: login');
+            $this->redirect->to('c:auth, a: login');
             return;
         }
 

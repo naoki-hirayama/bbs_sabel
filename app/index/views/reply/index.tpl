@@ -45,7 +45,7 @@
         <p><?= $form->n('picture') ?>：</p>
         <?e $form->file('picture') ?><br />
 
-        <?e $form->select('color', $select_color_options) ?>
+        <?e $form->select('color', Replies::getSelectColorOptions()) ?>
 
         <? if (!$IS_LOGIN) : ?>
             <p>削除パスワード:</p>

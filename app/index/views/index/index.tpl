@@ -24,7 +24,7 @@
         <p><?= $form->n('picture') ?>：</p>
         <?e $form->file('picture') ?><br />
 
-        <?e $form->select('color', $select_color_options) ?>
+        <?e $form->select('color', Posts::getSelectColorOptions()) ?>
 
         <? if (!$IS_LOGIN) : ?>
             <p>削除パスワード:</p>
@@ -61,15 +61,13 @@
                     時間：
                     <?=  $post->created_at ?><br />
                     レス :
+                    <a href="<?e uri("c: reply, a: index, param: {$post->id}") ?>">
                     <? if (!empty($reply_counts[$post->id])) : ?>
-                        <a href="<?e uri("c: reply, a: index, param: {$post->id}") ?>">
                         <?= $reply_counts[$post->id] ?>件
-                        </a><br />
                     <? else : ?>
-                        <a href="<?e uri("c: reply, a: index, param: {$post->id}") ?>">
                         0件
-                        </a><br />
                     <? endif ?>
+                    </a><br />
                     <!--if文でパスワードが設定されていなかったら非表示 -->
                     <? if (!is_null($post->password) && is_null($post->user_id)) : ?>
                         <a href="<?e uri("a: delete, param: {$post->id}") ?>">削除</a><br />
