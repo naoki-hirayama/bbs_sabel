@@ -54,7 +54,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             $form->post_id = $this->post->id;
 
             $form->save();
-            $this->redirect->to("a: index, p: {$this->post->id}");
+            $this->redirect->to("a: index, param: {$this->post->id}");
             return;
         }
     }
