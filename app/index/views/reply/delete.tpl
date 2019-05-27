@@ -21,7 +21,7 @@
             時間：
             <?= $reply->created_at ?><br />
             ---------------------------------------------<br />
-            <form action="<?= uri('') ?>" method="post">
+            <form action="<?e uri('') ?>" method="post">
             <?php if ($reply->password !== null) : ?>
                 <p>削除パスワード:</p>
                 <input type="password" name="password_input"><br />
@@ -30,7 +30,7 @@
                 <input type="hidden" name="password_input">
                 <input type="submit" value="ユーザー削除"/><br />
             <?php endif ?>
-            <a href="/">戻る</a>
+            <a href="<?e uri('') ?>">戻る</a>
             </form>        
         </li>
     </ul>

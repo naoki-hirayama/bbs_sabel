@@ -3,7 +3,7 @@
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
     
-    <form action="<?php echo uri('') ?>" method="post" >
+    <form action="<?e uri('') ?>" method="post" >
         <p><?= $form->n('name') ?>：</p>
         <?e $form->text('name') ?><br />
         <p><?= $form->n('login_id') ?>：</p>
@@ -14,6 +14,6 @@
         <?e $form->password('confirm_password') ?><br />
         <input type="submit" name="signup" value="登録する">
     </form>
-    <a href="/auth/login"　class="btn btn-primary">すでに登録済みの方はこちらへ</a><br />
-    <a href="/">登録しないで使う</a>
+    <a href="<?e uri("a: login") ?>"　class="btn btn-primary">すでに登録済みの方はこちらへ</a><br />
+    <a href="<?e uri('') ?>">登録しないで使う</a>
 </body>

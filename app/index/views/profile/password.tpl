@@ -14,5 +14,5 @@
         <?e $form->password('confirm_password') ?><br />
         <input type="submit" value="変更する"/><br />
     </form>
-    <a href="<?= uri('c:profile, a:edit') ?>">戻る</a><br />
+    <a href="<?e uri('c:profile, a:edit') ?>">戻る</a><br />
 </body>

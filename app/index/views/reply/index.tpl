@@ -1,14 +1,14 @@
 <body>
     <!--ログイン情報-->
     <partial name="shared/info" />
-    <a href="/"　class="btn btn-primary">投稿画面へ戻る</a>
+    <a href="<?e uri('') ?>"　class="btn btn-primary">投稿画面へ戻る</a>
     <ul>
         <li>
             投稿ID:
             <?= $post->id ?><br />
             名前：
             <? if (!is_null($post->user_id)) : ?>
-                <a href="<?= uri("c: profile, a: index, param: {$post->user_id}") ?>">
+                <a href="<?e uri("c: profile, a: index, param: {$post->user_id}") ?>">
                     <?= $user->name ?>
                 </a><br />
             <? else : ?>
@@ -32,7 +32,7 @@
     <!--エラーメッセージ-->
     <partial name="shared/error" />
     <h2>レス投稿画面</h2>
-    <form action="<?= uri('') ?>" method="post" enctype="multipart/form-data">
+    <form action="<?e uri('') ?>" method="post" enctype="multipart/form-data">
         <? if ($IS_LOGIN) : ?>
         <p><?= $form->n('name') ?>：<?= $LOGIN_USER->name ?></p>
         <?e $form->hidden('name', "value={$LOGIN_USER->name}") ?>
@@ -44,7 +44,7 @@
         <?e $form->textarea('comment', 'rows=4', 'ls=20') ?><br />
         <p><?= $form->n('picture') ?>：</p>
         <?e $form->file('picture') ?><br />
-        
+
         <?e $form->select('color', $select_color_options) ?>
 
         <? if (!$IS_LOGIN) : ?>
@@ -67,7 +67,7 @@
                     <?= $reply->id ?><br />
                     名前：
                     <? if (!is_null($reply->user_id)) : ?>
-                        <a href="<?= uri("c: profile, a: index, param: {$post->user_id}") ?>"><?= $reply->name ?></a><br />
+                        <a href="<?e uri("c: profile, a: index, param: {$post->user_id}") ?>"><?= $reply->name ?></a><br />
                     <? else : ?>
                         <?= $reply->name ?><br />
                     <? endif ?>
@@ -87,9 +87,9 @@
                     <!--if文でパスワードが設定されていなかったら非表示 -->
                     
                     <? if (!is_null($reply->password) && is_null($reply->user_id)) : ?>
-                        <a href="<?= uri("a: delete, param: {$reply->id}") ?>">削除</a><br />
+                        <a href="<?e uri("a: delete, param: {$reply->id}") ?>">削除</a><br />
                     <? elseif (!is_null($reply->user_id) && !is_null($LOGIN_USER) && $reply->user_id === $LOGIN_USER->id) : ?>
-                        <a href="<?= uri("a: delete, param: {$reply->id}") ?>">ユーザー削除</a><br />
+                        <a href="<?e uri("a: delete, param: {$reply->id}") ?>">ユーザー削除</a><br />
                     <? endif ?>
                     <!--　ここまで　-->
                 

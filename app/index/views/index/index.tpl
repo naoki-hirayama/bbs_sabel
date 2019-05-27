@@ -1,15 +1,15 @@
     <? if ($IS_LOGIN) : ?>
-        <a href="/auth/logout">ログアウト</a><br />
+        <a href="<?e uri('c:auth, a:logout') ?>">ログアウト</a><br />
     <? else : ?>
-        <a href="/auth/register">登録はこちらから</sa><br />
-        <a href="/auth/login">ログインはこちらから</a>
+        <a href="<?e uri('c:auth, a:register') ?>">登録はこちらから</sa><br />
+        <a href="<?e uri('c:auth, a:login') ?>">ログインはこちらから</a>
     <? endif ?>
     <!--ログイン情報-->
     <partial name="shared/info" />
     <h1>投稿画面</h1>
     <!-- エラーメッセージ -->
     <partial name="shared/error" />
-    <form action="<?= uri('') ?>" method="post" enctype="multipart/form-data">
+    <form action="<?e uri('') ?>" method="post" enctype="multipart/form-data">
         <? if ($IS_LOGIN) : ?>
         <p><?= $form->n('name') ?>：<?= $LOGIN_USER->name ?></p>
         <?e $form->hidden('name', "value={$LOGIN_USER->name}") ?>
@@ -36,7 +36,6 @@
     </form>
     <?php if (empty($errors)) : ?>
         <h2>投稿一覧</h2>
-        
         <ul>
         <if expr="$paginator->results">
             <foreach from="$paginator->results" value="$post">
@@ -45,7 +44,7 @@
                     <?= $post->id ?><br />
                     名前：
                     <? if (!is_empty($post->user_id)) : ?>
-                        <a href="<?= uri("c: profile, a: index, param: {$post->user_id}") ?>"><?= $user_names[$post->user_id] ?></a><br />
+                        <a href="<?e uri("c: profile, a: index, param: {$post->user_id}") ?>"><?= $user_names[$post->user_id] ?></a><br />
                     <? else : ?>
                         <?= $post->name ?><br />
                     <? endif ?>
@@ -63,19 +62,19 @@
                     <?=  $post->created_at ?><br />
                     レス :
                     <? if (!empty($reply_counts[$post->id])) : ?>
-                        <a href="<?= uri("c: reply, a: index, param: {$post->id}") ?>">
+                        <a href="<?e uri("c: reply, a: index, param: {$post->id}") ?>">
                         <?= $reply_counts[$post->id] ?>件
                         </a><br />
                     <? else : ?>
-                        <a href="<?= uri("c: reply, a: index, param: {$post->id}") ?>">
+                        <a href="<?e uri("c: reply, a: index, param: {$post->id}") ?>">
                         0件
                         </a><br />
                     <? endif ?>
                     <!--if文でパスワードが設定されていなかったら非表示 -->
                     <? if (!is_null($post->password) && is_null($post->user_id)) : ?>
-                        <a href="<?= uri("a: delete, param: {$post->id}") ?>">削除</a><br />
+                        <a href="<?e uri("a: delete, param: {$post->id}") ?>">削除</a><br />
                     <? elseif (!is_null($post->user_id) && !is_null($LOGIN_USER) && $post->user_id === $LOGIN_USER->id) : ?>
-                        <a href="<?= uri("a: delete, param: {$post->id}") ?>">ユーザー削除</a><br />
+                        <a href="<?e uri("a: delete, param: {$post->id}") ?>">ユーザー削除</a><br />
                     <? endif ?>
                     <!--　ここまで　-->
                 
