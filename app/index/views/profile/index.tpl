@@ -22,8 +22,8 @@
     </ul>
     <? if ($IS_LOGIN && $LOGIN_USER->id === $user->id) : ?>
         <a href="<?e uri('c:profile, a:edit') ?>">編集する</a><br />
-        <a href="<?e uri('') ?>">戻る</a>
+        <a href="<?e uri('/') ?>">戻る</a>
     <? else : ?>
-        <a href="<?e uri('') ?>">戻る</a>
+        <a href="<?e uri('/') ?>">戻る</a>
     <? endif ?>
 </body>

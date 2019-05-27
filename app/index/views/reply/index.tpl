@@ -1,7 +1,7 @@
 <body>
     <!--ログイン情報-->
     <partial name="shared/info" />
-    <a href="<?e uri('') ?>"　class="btn btn-primary">投稿画面へ戻る</a>
+    <a href="<?e uri('/') ?>"　class="btn btn-primary">投稿画面へ戻る</a>
     <ul>
         <li>
             投稿ID:

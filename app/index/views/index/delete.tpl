@@ -31,7 +31,7 @@
                 <input type="hidden" name="password_input">
                 <input type="submit" value="ユーザー削除"/><br />
             <?php endif ?>
-            <a href="<?e uri('') ?>">戻る</a>
+            <a href="<?e uri('/') ?>">戻る</a>
             </form>        
         </li>
     </ul>
