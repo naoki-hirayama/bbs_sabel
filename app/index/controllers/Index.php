@@ -82,7 +82,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
     public function delete()
     {
         $this->title = '削除ページ';
-        $this->select_color_options = Posts::getSelectColorOptions();
+        
         $this->post = MODEL('Posts', $this->param);
 
         if (!$this->post->isSelected()) {
