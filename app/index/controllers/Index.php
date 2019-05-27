@@ -15,23 +15,23 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $post_ids = [];
         foreach ($paginator->results as $post) {
             $post_ids[] = $post->id;
-            if (!is_null($post->user_id)) {
+            if (!is_empty($post->user_id)) {
                 $user_ids[] = $post->user_id;
             }
         }
-
-        if (!empty($user_ids)) {
+        
+        if (!is_empty($user_ids)) {
             $users = finder('Users')
-            ->in('id', $user_ids)
-            ->sort('id', 'desc')
-            ->fetchArray();
+                     ->in('id', $user_ids)
+                     ->sort('id', 'desc')
+                     ->fetchArray();
 
             $this->user_names = array_column($users, 'name', 'id');
         }
 
         $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $post_ids) . ") GROUP BY post_id");
 
-        if (!empty($tmp)) {
+        if (!is_empty($tmp)) {
             $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
         }
 
@@ -103,7 +103,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 unlink("images/posts/{$this->post->picture}");
             }
 
-            $replies = finder('Replies')->eq('post_id', $this->param)->fetchArray();
+            $replies = finder('Replies')
+                       ->eq('post_id', $this->param)
+                       ->fetchArray();
             
             if (!is_empty($replies)) {
                 foreach ($replies as $reply) {

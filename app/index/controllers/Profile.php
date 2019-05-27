@@ -55,7 +55,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 $rename_file_path = 'images/users/' . $rename_file;
                 move_uploaded_file($posted_picture, $rename_file_path);
 
-                if (!is_null($this->LOGIN_USER->picture)) {
+                if (!is_empty($this->LOGIN_USER->picture)) {
                     unlink("images/users/{$this->LOGIN_USER->picture}");
                 }
 
