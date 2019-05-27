@@ -24,17 +24,7 @@
         <p><?= $form->n('picture') ?>：</p>
         <?e $form->file('picture') ?><br />
 
-        <select name="color">
-        <? foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
-            <? if (!is_empty($form->color)) : ?>
-                <option value="<?= $key ?>"<?= $key === $form->color ? 'selected' : '' ?>>
-            <? else : ?>
-                <option value="<?= $key ?>">
-            <? endif ?>
-            <?= $value ?>
-            </option>
-        <? endforeach ?>
-        </select><br />
+        <?e $form->select('color', $select_color_options) ?>
 
         <? if (!$IS_LOGIN) : ?>
             <p>削除パスワード:</p>
