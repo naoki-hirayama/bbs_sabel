@@ -74,3 +74,82 @@
 <partial name="shared/pager" />
 <? endif ?>
 
+<div id="modalwin" class="modalwin hide">
+    <a herf="#" class="modal-close"></a>
+    <h1>投稿編集</h1>
+    <div class="modalwin-contents">
+        <input id="input_id" type="hidden" name="name" value="">
+        <input id="input_name" type="text" name="name" value="">
+        <br />
+        <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
+        <img id="img"src="" width="30" height="30"><br />
+        <select id="input_color" name="color">
+        <?php foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
+            <option value="<?php echo $key ?>"><?php echo $value; ?></option>
+        <?php endforeach ?>
+        </select>
+        <br />
+        <button id="ajax">編集</button>
+        <br />
+        <button id="close">閉じる</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+    $('.show-modal').on('click', function() {
+        
+        var id = $(this).data('id');
+        
+        $.ajax({
+            url: '<?e uri('c: index, a: get_ajax') ?>',
+            type:'GET',
+            data:{
+                'id': id,
+            },
+            dataType: 'json',
+        }).done(function(post) {
+            $("#input_id").val(post.id);
+            $("#input_name").val(post.name);
+            $("#input_comment").val(post.comment);
+            if (post.picture !== null) {
+                $("#img").attr('src', '/images/posts/' + post.picture);
+            } else {
+                $("#img").attr('src', '/images/posts/noimage.png');
+            }
+            $("#input_color").val(post.color);
+        }).fail(function()  {
+            alert("通信に失敗しました");
+        }); 
+    });
+        
+    $('#ajax').on('click', function() {
+        
+        $.ajax({
+            url:'<?e uri('c: index, a: edit_ajax') ?>',
+            type:'POST',
+            data:{
+                'id':$("#input_id").val(),
+                'name':$("#input_name").val(),
+                'comment':$("#input_comment").val(),
+                'color':$("#input_color").val(),
+            },
+            dataType: 'json',
+        }).done(function(response) {
+            if (response['status'] === true) {
+                alert("編集しました。");
+                var post = response['post'];
+                $('#edit_name_' + post['id']).text(post['name']);
+                $('#font_' + post['id']).text(post['comment']);
+                $('#font_' + post['id']).attr('color',　post['color']);
+            } else {
+                alert(response['errors']);
+            }
+            
+        }).fail(function()  {
+            alert("通信に失敗しました");
+        });
+    });
+});
+</script>
+

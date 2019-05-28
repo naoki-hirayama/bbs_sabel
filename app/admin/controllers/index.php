@@ -19,7 +19,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 $user_ids[] = $post->user_id;
             }
         }
-
+        
         if (!is_empty($user_ids)) {
             $this->user_names = finder('Users')
                 ->in('id', $user_ids)
@@ -36,9 +36,56 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         }
 
         $this->form = $form = new Forms_Posts();
-
-        
-
-
     }
+
+    public function get_ajax()
+    {
+        //レイアウトを使用しない
+        $this->layout = false;
+
+        $post_id = $_GET['id'];
+        $_post = MODEL('Posts', $post_id);
+        $post = [
+            'id' => $_post->id,
+            'name' => $_post->name,
+            'comment' => $_post->comment,
+            'picture' => $_post->picture,
+            'color'  => $_post->color,
+        ];
+        return $post;
+    }
+
+    public function edit_ajax()
+    {
+        $this->layout = false;
+
+        $this->form = $form = new Forms_Posts($this->id);
+
+        if ($this->isPost()) {
+            $form->submit($this->POST_VARS, array(
+                'name',
+                'comment',
+                'color',
+            ));
+
+            $response = [];
+            if (!$form->validate()) {
+                $response = [
+                    'errors' => $form->getErrors(),
+                    'status' => false,
+                ];
+                return $response;
+            }
+
+            $response = [
+                'status' => true,
+                'post'   => $this->POST_VARS,
+            ];
+
+            $form->save();
+            return $response;
+        }
+    }
+
+
 }
