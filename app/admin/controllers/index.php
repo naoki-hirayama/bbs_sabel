@@ -19,7 +19,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 $user_ids[] = $post->user_id;
             }
         }
-        
+
         if (!is_empty($user_ids)) {
             $this->user_names = finder('Users')
                 ->in('id', $user_ids)
@@ -36,6 +36,36 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         }
 
         $this->form = $form = new Forms_Posts();
+    }
+
+    public function delete()
+    {
+        if ($this->isPost()) {
+            $this->post = MODEL('Posts', $this->post_id);
+
+            //トランザクション
+            $replies = finder('Replies')
+                ->eq('post_id', $this->POST_VARS['post_id'])
+                ->fetchArray();
+
+            if (!is_empty($replies)) {
+                foreach ($replies as $reply) {
+                    unlink("images/replies/{$reply['picture']}");
+                }
+            }
+
+            $post_repleis = MODEL('Replies');
+            $post_repleis->setCondition(eq('post_id', $this->POST_VARS['post_id']));
+            $post_repleis->delete();
+
+            if (!is_empty($this->post->picture)) {
+                unlink("images/posts/{$this->post->picture}");
+            }
+            $this->post->delete();
+
+            $this->redirect->to('c: index');
+            return;
+        }
     }
 
     public function get_ajax()
@@ -58,10 +88,9 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
     public function edit_ajax()
     {
         $this->layout = false;
-
-        $this->form = $form = new Forms_Posts($this->id);
-
         if ($this->isPost()) {
+            $this->form = $form = new Forms_Posts($this->id);
+
             $form->submit($this->POST_VARS, array(
                 'name',
                 'comment',

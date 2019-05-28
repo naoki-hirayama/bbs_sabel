@@ -86,7 +86,7 @@
         <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="img" src="" width="30" height="30"><br />
         <select id="input_color" name="color">
-        <?php foreach($select_color_options as $key => $value) : ?>
+        <?php foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
             <option value="<?php echo $key ?>"><?php echo $value; ?></option>
         <?php endforeach ?>
         </select>
@@ -126,7 +126,7 @@
                 var id = $(this).data('id');
                 
                 $.ajax({
-                    url:'get_ajax.php',
+                    url:'<?e uri('c: index, a: get_ajax') ?>',
                     type:'GET',
                     data:{
                         'id': id,
@@ -139,7 +139,7 @@
     				if (post.picture !== null) {
     				    $("#img").attr('src', '/images/posts/' + post.picture);
     				} else {
-    				    $("#img").attr('src', '/kadai-ibg/images/posts/noimage.png');
+    				    $("#img").attr('src', '/images/posts/noimage.png');
     				}
     				$("#input_color").val(post.color);
                 }).fail(function()  {
@@ -149,7 +149,7 @@
             $('#ajax').on('click', function() {
                 
                 $.ajax({
-                    url:'edit_ajax.php',
+                    url:'<?e uri('c: index, a: edit_ajax') ?>',
                     type:'POST',
                     data:{
                         'id':$("#input_id").val(),

@@ -3,7 +3,7 @@
 <form action="<?e uri('') ?>" method="get">
     <p><strong>検索フォーム</strong></p>
     <?= $form->n('name') ?>：<?e $form->text('name') ?><br />
-    <?= $form->n('comment') ?>：<?e $form->password('comment') ?><br />
+    <?= $form->n('comment') ?>：<?e $form->text('comment') ?><br />
     <?e $form->select('color', Posts::getSelectColorOptions()) ?>
     <input type="submit" value="検索"><br />
 </form>

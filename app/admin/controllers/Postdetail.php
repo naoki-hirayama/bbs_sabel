@@ -35,4 +35,15 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
                 ->fetchArray('name');
         }
     }
+
+    public function reply_delete()
+    {
+
+    }
+
+    public function reply_edit_ajax()
+    { 
+
+    }
+
 }
