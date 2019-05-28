@@ -37,6 +37,8 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 
         $this->form = $form = new Forms_Posts();
 
+        
+
 
     }
 }

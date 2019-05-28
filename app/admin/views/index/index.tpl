@@ -65,7 +65,7 @@
                 <input type="button" id="btn" value="編集" class="show-modal" data-id="<?= $post->id ?>">
             </td>
             <td>
-                <a href="postdetail?id=<?= $post->id ?>">投稿詳細</a>
+                <a href="<?e uri("c: postdetail a: index, param: {$post->id}") ?>">投稿詳細</a>
             </td>
         </tr>
     </foreach>
