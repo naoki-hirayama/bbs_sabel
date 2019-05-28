@@ -26,7 +26,7 @@
         ---------------------------------------------<br />
     </li>
 </ul>
-<form action="delete" method="post" id="deleteform">
+<form action="<?e uri('c: index, a: delete') ?>" method="post" id="deleteform">
     <input type="hidden" value="<?= $post->id ?>" name="post_id">
     <input type="submit" value="投稿削除">
 </form>
