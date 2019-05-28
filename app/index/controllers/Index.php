@@ -10,7 +10,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $paginator = new Paginator('Posts');
         $paginator->setDefaultOrder('id', 'desc');
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
-
+        
         $user_ids = [];
         $post_ids = [];
         foreach ($paginator->results as $post) {
@@ -36,7 +36,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
         } 
 
         $this->form = $form = new Forms_Posts();
-
+        if ($this->IS_LOGIN) {
+            $form->name = $this->LOGIN_USER->name;
+        }
         if ($this->isPost()) {
 
             $form->submit($this->POST_VARS, array(
@@ -84,22 +86,23 @@ class Index_Controllers_Index extends Index_Controllers_Base
         $this->title = '削除ページ';
         
         $this->post = MODEL('Posts', $this->param);
-
+        
+        
         if (!$this->post->isSelected()) {
             $this->notFound();
             return;
         }
-        
+        // パスワード未設定かつ特定のユーザーの投稿ではない場合は削除不可
         if (is_empty($this->post->password) && is_empty($this->post->user_id)) {
             $this->notFound();
             return; 
         }
-        
+        //ログインユーザーの操作かつ投稿のユーザーidがログインユーザーのidと違うかつパスワード未設定
         if ($this->IS_LOGIN && $this->post->user_id !== $this->LOGIN_USER->id && is_empty($this->post->password)) {
             $this->notFound();
             return;
         }
-
+        //ログインユーザー以外の操作かつ特定ユーザーの投稿の場合
         if(!$this->IS_LOGIN && !is_empty($this->post->user_id)) {
             $this->notFound();
             return;

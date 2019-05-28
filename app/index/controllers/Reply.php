@@ -22,6 +22,9 @@ class Index_Controllers_Reply extends Index_Controllers_Base
         $this->total_replies = count($this->replies);
 
         $this->form = $form = new Forms_Replies();
+        if ($this->IS_LOGIN) {
+            $form->name = $this->LOGIN_USER->name;
+        }
 
         if ($this->isPost()) {
 
