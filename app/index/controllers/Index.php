@@ -97,6 +97,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $this->notFound();
             return; 
         }
+        //user_idがからじゃない時　未ログイン ||　または　$this->post->user_id !== $this->LOGIN_USER->id
+        if (!is_empty($this->post->user_id)) 
+
         //ログインユーザーの操作かつ投稿がログインユーザーのものと異なる場合、かつパスワード未設定の場合削除不可
         if ($this->IS_LOGIN && $this->post->user_id !== $this->LOGIN_USER->id && is_empty($this->post->password)) {
             $this->notFound();

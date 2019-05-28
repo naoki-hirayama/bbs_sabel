@@ -24,12 +24,13 @@ class Renderer_Processor extends Sabel_Bus_Processor
   public function execute(Sabel_Bus $bus)
   {
     // Index moduleの場合はSabelデフォルトのRendererを使う
-    if ($bus->get("destination")->getModule() === "index") {
-      $renderer = new Renderer_Sabel();
-    } else {
-      require_once RUN_BASE . "/vendor/autoload.php";
-      $renderer = new Renderer_Twig();
-    }
+    $renderer = new Renderer_Sabel();
+    // if ($bus->get("destination")->getModule() === "index") {
+    //   $renderer = new Renderer_Sabel();
+    // } else {
+    //   require_once RUN_BASE . "/vendor/autoload.php";
+    //   $renderer = new Renderer_Twig();
+    // }
 
     if ($renderer->hasMethod("initialize")) {
       $renderer->initialize();
