@@ -97,12 +97,12 @@ class Index_Controllers_Index extends Index_Controllers_Base
             $this->notFound();
             return; 
         }
-        //ログインユーザーの操作かつ投稿のユーザーidがログインユーザーのidと違うかつパスワード未設定
+        //ログインユーザーの操作かつ投稿がログインユーザーのものと異なる場合、かつパスワード未設定の場合削除不可
         if ($this->IS_LOGIN && $this->post->user_id !== $this->LOGIN_USER->id && is_empty($this->post->password)) {
             $this->notFound();
             return;
         }
-        //ログインユーザー以外の操作かつ特定ユーザーの投稿の場合
+        //ログインユーザー以外の操作かつ特定ユーザーの投稿の場合削除不可
         if(!$this->IS_LOGIN && !is_empty($this->post->user_id)) {
             $this->notFound();
             return;
