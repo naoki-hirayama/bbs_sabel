@@ -12,10 +12,5 @@ class Posts extends Sabel_Db_Model
     {
         return ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
     }
-
-    public static function getSelectColorOptionsInSearch()
-    {
-        return [null => '未選択', 'black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
-    }
     
 }
