@@ -81,9 +81,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
         if ($this->isPost()) {
             $this->reply = MODEL('Replies', $this->reply_id);
-
             //トランザクション
-
             if (!is_empty($this->reply->picture)) {
                 unlink("images/replies/{$this->reply->picture}");
             }
@@ -100,8 +98,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         //レイアウトを使用しない
         $this->layout = false;
 
-        $reply_id = $_GET['reply_id'];
-        $reply = MODEL('Replies', $reply_id);
+        $reply = MODEL('Replies', $this->reply_id);
         $reply = [
             'id' => $reply->id,
             'name' => $reply->name,

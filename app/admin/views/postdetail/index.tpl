@@ -3,7 +3,7 @@
     <li>
         投稿ID:
         <?= $post->id ?><br />
-        名前：
+        名前 :
         <div id="post_name">
             <? if (!is_empty($post->user_id)) : ?>
                 <?= $user->name ?><br />
