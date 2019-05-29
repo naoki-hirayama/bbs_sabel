@@ -59,6 +59,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         $this->layout = false;
 
         $_post = MODEL('Posts', $this->id);
+        $post = [];
         $post = [
             'id' => $_post->id,
             'name' => $_post->name,
