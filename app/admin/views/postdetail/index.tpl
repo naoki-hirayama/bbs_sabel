@@ -85,9 +85,9 @@
         <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="img" src="" width="30" height="30"><br />
         <select id="input_color" name="color">
-        <?php foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
-            <option value="<?php echo $key ?>"><?php echo $value; ?></option>
-        <?php endforeach ?>
+        <? foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
+            <option value="<?= $key ?>"><?= $value ?></option>
+        <? endforeach ?>
         </select>
         <br />
         <button id="ajax">編集</button>
@@ -106,9 +106,9 @@
         <textarea id="reply_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="reply_img" src="" width="30" height="30"><br />
         <select id="reply_color" name="color">
-        <?php foreach($select_color_options as $key => $value) : ?>
-            <option value="<?php echo $key ?>"><?php echo $value; ?></option>
-        <?php endforeach ?>
+        <? foreach(Replies::getSelectColorOptions() as $key => $value) : ?>
+            <option value="<?= $key ?>"><?= $value ?></option>
+        <? endforeach ?>
         </select>
         <br />
         <button id="reply_ajax">編集</button>
@@ -179,23 +179,24 @@
                 var reply_id = $(this).data('reply');
                 
                 $.ajax({
-                    url:'get_reply_ajax.php',
+                    url:'<?e uri('c: postdetail, a: reply_get_ajax') ?>',
                     type:'GET',
                     data:{
                         'reply_id': reply_id,
                     },
-                    dataType: 'json',
-                }).done(function(reply_post) {
                     
-                    $("#reply_id").val(reply_post.id);
-    				$("#reply_name").val(reply_post.name); 
-    				$("#reply_comment").val(reply_post.comment);
-    				if (reply_post.picture !== null) {
-    				    $("#reply_img").attr('src', '/kadai-ibg/images/replies/' + reply_post.picture);
+                    dataType: 'json',
+                }).done(function(reply) {
+                    
+                    $("#reply_id").val(reply.id);
+    				$("#reply_name").val(reply.name); 
+    				$("#reply_comment").val(reply.comment);
+    				if (reply.picture !== null) {
+    				    $("#reply_img").attr('src', '/images/replies/' + reply.picture);
     				} else {
-    				    $("#reply_img").attr('src', '/kadai-ibg/images/replies/noimage.png');
+    				    $("#reply_img").attr('src', '/images/replies/noimage.png');
     				}
-    				$("#reply_color").val(reply_post.color);
+    				$("#reply_color").val(reply.color);
                 }).fail(function() {
                     alert("通信に失敗しました");
                 });
@@ -204,7 +205,7 @@
             $('#reply_ajax').on('click', function() {
                 
                 $.ajax({
-                    url:'edit_reply_ajax.php',
+                    url:'<?e uri('c: postdetail, a: reply_edit_ajax') ?>',
                     type:'POST',
                     data:{
                         'id':$("#reply_id").val(),

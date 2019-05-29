@@ -95,9 +95,54 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
     }
 
-    public function reply_edit_ajax()
-    { 
+    public function reply_get_ajax()
+    {
+        //レイアウトを使用しない
+        $this->layout = false;
 
+        $reply_id = $_GET['reply_id'];
+        $reply = MODEL('Replies', $reply_id);
+        $reply = [
+            'id' => $reply->id,
+            'name' => $reply->name,
+            'comment' => $reply->comment,
+            'picture' => $reply->picture,
+            'color'  => $reply->color,
+        ];
+        return $reply;
+    }
+
+    public function reply_edit_ajax()
+    {
+        //レイアウトを使用しない
+        $this->layout = false;
+        
+        if ($this->isPost()) {
+            $this->form = $form = new Forms_Replies($this->id);
+
+            $form->submit($this->POST_VARS, array(
+                'name',
+                'comment',
+                'color',
+            ));
+
+            $response = [];
+            if (!$form->validate()) {
+                $response = [
+                    'errors' => $form->getErrors(),
+                    'status' => false,
+                ];
+                return $response;
+            }
+
+            $response = [
+                'status' => true,
+                'reply'   => $this->POST_VARS,
+            ];
+
+            $form->save();
+            return $response;
+        }
     }
 
 }
