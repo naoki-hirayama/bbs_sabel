@@ -33,7 +33,9 @@
     <input type="submit" value="投稿削除">
 </form>
 <input type="button" id="btn" value="投稿編集" class="show-modal" data-id="<?= $post->id ?>">
+
 <h2>レス一覧</h2>
+
 <table border="2">
     <tr>
         <th>ID</th>
@@ -43,7 +45,7 @@
         <th>編集リンク</th>
         <th>削除ボタン</th>
     </tr>
-    <?php foreach ($replies as $reply) : ?>
+    <? foreach ($replies as $reply) : ?>
         <tr>
             <td>
                 <?= $reply->id ?>
@@ -53,11 +55,11 @@
             </td>
 
             <td id="reply_name_<?= $reply->id ?>">
-                <?php if (!is_empty($reply->user_id)) : ?>
+                <? if (!is_empty($reply->user_id)) : ?>
                     <?= $user_names[$reply->user_id] ?>
-                <?php else : ?>
+                <? else : ?>
                     <?= $reply->name ?>
-                <?php endif ?>
+                <? endif ?>
             </td>
             <td>
                 <font id="reply_font_<?= $reply->id ?>" color="<?= $reply->color ?>">
@@ -74,7 +76,7 @@
                 </form>
             </td>
         </tr>
-    <?php endforeach ?>
+    <? endforeach ?>
 </table>
 <!--投稿モーダル-->
 <div id="modalwin" class="modalwin hide">
