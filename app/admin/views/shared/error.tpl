@@ -1,7 +1,7 @@
-<?php if (!empty($errors)) : ?>
+<? if (!empty($errors)) : ?>
   <ul>
-      <?php foreach ($errors as $error) : ?>
-        <li><?php echo $error ?></li>
-      <?php endforeach ?>
+      <? foreach ($errors as $error) : ?>
+        <li><?＝ $error ?></li>
+      <? endforeach ?>
   </ul>
-<?php endif ?>
+<? endif ?>
