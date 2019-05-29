@@ -11,9 +11,9 @@
     <a href="<?e uri('') ?>">戻る</a>
     <h2>検索結果</h2>
     <ul>
-        <li>名前：<?= ($form->name !== null) ? $form->name : '指定なし' ?></li>
-        <li>本文：<?= ($form->comment !== null) ? $form->comment : '指定なし' ?></li>
-        <li>色：<?= ($form->color !== '') ? Posts::getSelectColorOptionsInSearch()[$form->color]: '指定なし' ?></li>
+        <li>名前：<?= ($name !== null) ? $name : '指定なし' ?></li>
+        <li>本文：<?= ($comment !== null) ? $comment : '指定なし' ?></li>
+        <li>色：<?= ($color !== '') ? Posts::getSelectColorOptionsInSearch()[$color]: '指定なし' ?></li>
     </ul>
     
     <? if ($records === 0) : ?>
