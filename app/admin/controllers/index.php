@@ -12,17 +12,14 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         
         if (!is_null($this->name)) {
             $paginator->setCondition(contains('name', $this->name));
-            $this->name = $this->name;
             $this->result = true;
         }
         if (!is_null($this->comment)) {
             $paginator->setCondition(contains('comment', $this->comment));
-            $this->comment = $this->comment;
             $this->result = true;
         }
         if (!is_null($this->color)) {
             $paginator->setCondition(eq('color', $this->color));
-            $this->color = $this->color;
             $this->result = true;
         }
         
