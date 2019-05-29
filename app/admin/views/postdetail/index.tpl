@@ -26,7 +26,7 @@
         ---------------------------------------------<br />
     </li>
 </ul>
-<form action="<?e uri('c: index, a: delete') ?>" method="post" id="deleteform">
+<form action="<?e uri('a: delete') ?>" method="post" id="deleteform">
     <input type="hidden" value="<?= $post->id ?>" name="post_id">
     <input type="submit" value="投稿削除">
 </form>
@@ -66,9 +66,8 @@
                 <input type="button" id="edit_reply_btn" value="レス編集" class="show-reply-modal" data-reply="<?= $reply->id ?>">
             </td>
             <td>
-                <form action="reply_delete" method="post" id="delete_reply_form">
+                <form action="<?e uri('a: reply_delete') ?>" method="post" id="delete_reply_form">
                     <input type="hidden" value="<?= $reply->id ?>" name="reply_id">
-                    <input type="hidden" value="<?= $reply->id ?>" name="post_id">
                     <input type="submit" value="削除">
                 </form>
             </td>

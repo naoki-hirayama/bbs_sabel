@@ -54,36 +54,6 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         }
     }
 
-    public function delete()
-    {
-        if ($this->isPost()) {
-            $this->post = MODEL('Posts', $this->post_id);
-
-            //トランザクション
-            $replies = finder('Replies')
-                ->eq('post_id', $this->post_id)
-                ->fetchArray();
-
-            if (!is_empty($replies)) {
-                foreach ($replies as $reply) {
-                    unlink("images/replies/{$reply['picture']}");
-                }
-            }
-
-            $post_repleis = MODEL('Replies');
-            $post_repleis->setCondition(eq('post_id', $this->post_id));
-            $post_repleis->delete();
-
-            if (!is_empty($this->post->picture)) {
-                unlink("images/posts/{$this->post->picture}");
-            }
-            $this->post->delete();
-
-            $this->redirect->to('c: index');
-            return;
-        }
-    }
-
     public function get_ajax()
     {
         //レイアウトを使用しない

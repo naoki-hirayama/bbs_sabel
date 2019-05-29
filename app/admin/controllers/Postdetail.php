@@ -36,8 +36,62 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         }
     }
 
+    public function delete()
+    {
+        //レイアウトを使用しない
+        $this->layout = false;
+
+        if ($this->isPost()) {
+            $this->post = MODEL('Posts', $this->post_id);
+
+            $replies = finder('Replies')
+                ->eq('post_id', $this->post_id)
+                ->fetchArray();
+
+            if (!is_empty($replies)) {
+                foreach ($replies as $reply) {
+                    unlink("images/replies/{$reply['picture']}");
+                }
+            }
+
+            $post_repleis = MODEL('Replies');
+            $post_repleis->setCondition(eq('post_id', $this->post_id));
+            $post_repleis->delete();
+
+            if (!is_empty($this->post->picture)) {
+                unlink("images/posts/{$this->post->picture}");
+            }
+            $this->post->delete();
+
+            $this->redirect->to('a: deleted');
+            return;
+        }
+    }
+
+    public function deleted()
+    {
+        $this->title = "削除完了";
+    }
+
+
     public function reply_delete()
     {
+        //レイアウトを使用しない
+        $this->layout = false;
+
+        if ($this->isPost()) {
+            $this->reply = MODEL('Replies', $this->reply_id);
+
+            //トランザクション
+
+            if (!is_empty($this->reply->picture)) {
+                unlink("images/replies/{$this->reply->picture}");
+            }
+            $this->reply->delete();
+
+            $this->redirect->to("a: index, param: {$this->reply->post_id}");
+            return;
+        }
 
     }
 
