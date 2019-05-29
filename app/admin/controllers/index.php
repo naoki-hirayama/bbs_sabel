@@ -6,21 +6,31 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
     {
         $this->title = "管理画面";
 
-        $this->form = $form = new Forms_Posts();
         $per_page_records = 10;
-        $paginator = new Paginator('Posts');
+
+        $this->form = $form = new Forms_Posts();
+        
+        $form->submit($this->GET_VARS, [
+            'name',
+            'comment',
+            'color',
+        ]);
+
+        $finder = finder('Posts');
         
         if (!is_null($this->name)) {
-            $paginator->setCondition(contains('name', $this->name));
+            $finder->contains('name', $this->name);
         }
         if (!is_null($this->comment)) {
-            $paginator->setCondition(contains('comment', $this->comment));
+            $finder->contains('comment', $this->comment);
         }
         if (!is_null($this->color)) {
-            $paginator->setCondition(eq('color', $this->color));
+            $finder->eq('color', $this->color);
         }
-        
-        $paginator->setDefaultOrder('id', 'desc');
+
+        $finder->sort('id', 'desc');
+
+        $paginator = new Paginator($finder);
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
         
         $user_ids = [];
