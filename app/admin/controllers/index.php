@@ -6,11 +6,29 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
     {
         $this->title = "管理画面";
 
+        $this->form = $form = new Forms_Posts();
         $per_page_records = 10;
         $paginator = new Paginator('Posts');
+        
+        if (!is_null($this->name)) {
+            $paginator->setCondition(contains('name', $this->name));
+            $form->name = $this->name;
+            $this->result = true;
+        }
+        if (!is_null($this->comment)) {
+            $paginator->setCondition(contains('comment', $this->comment));
+            $form->comment = $this->comment;
+            $this->result = true;
+        }
+        if (!is_null($this->color)) {
+            $paginator->setCondition(eq('color', $this->color));
+            $form->color = $this->color;
+            $this->result = true;
+        }
+        
         $paginator->setDefaultOrder('id', 'desc');
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
-
+        $this->records = Count($paginator->results);
         $user_ids = [];
         $post_ids = [];
         foreach ($paginator->results as $post) {
@@ -34,8 +52,6 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
             }
         }
-
-        $this->form = $form = new Forms_Posts();
     }
 
     public function delete()
@@ -45,7 +61,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 
             //トランザクション
             $replies = finder('Replies')
-                ->eq('post_id', $this->POST_VARS['post_id'])
+                ->eq('post_id', $this->post_id)
                 ->fetchArray();
 
             if (!is_empty($replies)) {
@@ -55,7 +71,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
             }
 
             $post_repleis = MODEL('Replies');
-            $post_repleis->setCondition(eq('post_id', $this->POST_VARS['post_id']));
+            $post_repleis->setCondition(eq('post_id', $this->post_id));
             $post_repleis->delete();
 
             if (!is_empty($this->post->picture)) {

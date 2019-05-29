@@ -4,24 +4,26 @@
     <p><strong>検索フォーム</strong></p>
     <?= $form->n('name') ?>：<?e $form->text('name') ?><br />
     <?= $form->n('comment') ?>：<?e $form->text('comment') ?><br />
-    <?e $form->select('color', Posts::getSelectColorOptions()) ?>
+    <?e $form->select('color', Posts::getSelectColorOptionsInSearch()) ?>
     <input type="submit" value="検索"><br />
 </form>
 
-<?php if (isset($result_records)) : ?>
-    <a href="index.php">戻る</a>
-    <h2>検索結果<?php echo $result_records ?>件</h2>
+<? if ($result) : ?>
+    <a href="<?e uri('') ?>">戻る</a>
+    <h2>検索結果</h2>
     <ul>
-        <li>名前：<?php echo ($_GET['name'] !== '') ? $_GET['name'] : '指定なし' ?></li>
-        <li>本文：<?php echo ($_GET['comment'] !== '') ? $_GET['comment'] : '指定なし' ?></li>
-        <li>色：<?php echo ($_GET['color'] !== '') ? $select_color_options[$_GET['color']] : '指定なし' ?></li>
+        <li>名前：<?= ($form->name !== null) ? $form->name : '指定なし' ?></li>
+        <li>本文：<?= ($form->comment !== null) ? $form->comment : '指定なし' ?></li>
+        <li>色：<?= ($form->color !== '') ? Posts::getSelectColorOptionsInSearch()[$form->color]: '指定なし' ?></li>
     </ul>
-    <?php if ($result_records == 0) : ?>
-        <?php exit; ?>
-    <?php endif ?>
-<?php else : ?>
+    
+    <? if ($records === 0) : ?>
+        <p><strong>結果無し</strong></p>
+        <? exit; ?>
+    <? endif ?>
+<? else : ?>
     <h2>投稿一覧</h2>
-<?php endif ?>
+<? endif ?>
 
 <table border="2">
     <tr>
