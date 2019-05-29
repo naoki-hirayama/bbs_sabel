@@ -12,20 +12,17 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         
         if (!is_null($this->name)) {
             $paginator->setCondition(contains('name', $this->name));
-            $this->result = true;
         }
         if (!is_null($this->comment)) {
             $paginator->setCondition(contains('comment', $this->comment));
-            $this->result = true;
         }
         if (!is_null($this->color)) {
             $paginator->setCondition(eq('color', $this->color));
-            $this->result = true;
         }
         
         $paginator->setDefaultOrder('id', 'desc');
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
-        $this->records = Count($paginator->results);
+        
         $user_ids = [];
         $post_ids = [];
         foreach ($paginator->results as $post) {
