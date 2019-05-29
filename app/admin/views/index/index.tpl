@@ -6,7 +6,7 @@
     <p><strong>検索フォーム</strong></p>
     <?= $form->n('name') ?>：<?e $form->text('name') ?><br />
     <?= $form->n('comment') ?>：<?e $form->text('comment') ?><br />
-    <?e $form->select('color', Posts::getSelectColorOptionsInSearch()) ?>
+    <?= $form->n('color') ?>：<?e $form->select('color', [null => '-'] + Posts::getSelectColorOptions()) ?>
     <input type="submit" value="検索"><br />
 </form>
 
