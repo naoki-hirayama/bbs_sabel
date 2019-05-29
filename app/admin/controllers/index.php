@@ -56,11 +56,9 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 
     public function get_ajax()
     {
-        //レイアウトを使用しない
         $this->layout = false;
 
-        $post_id = $_GET['id'];
-        $_post = MODEL('Posts', $post_id);
+        $_post = MODEL('Posts', $this->id);
         $post = [
             'id' => $_post->id,
             'name' => $_post->name,
