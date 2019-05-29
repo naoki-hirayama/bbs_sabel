@@ -1,4 +1,3 @@
-
 <h1>管理画面</h1>
 <form action="<?e uri('') ?>" method="get">
     <p><strong>検索フォーム</strong></p>

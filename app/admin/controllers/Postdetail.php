@@ -10,7 +10,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         $this->user = MODEL('Users', $this->post->user_id);
 
         if (!$this->post->isSelected()) {
-            $this->notFound();
+            $this->notfound();
             return;
         }
 
@@ -71,6 +71,12 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
     public function deleted()
     {
         $this->title = "削除完了";
+        $this->post = MODEL('Posts', $this->param);
+        
+        if (!$this->post->isSelected()) {
+            $this->notfound();
+            return;
+        }
     }
 
 
