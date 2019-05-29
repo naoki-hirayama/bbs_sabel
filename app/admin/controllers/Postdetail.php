@@ -18,7 +18,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             ->eq('post_id', $this->param)
             ->sort('id', 'desc')
             ->fetchAll();
-
+        
         $user_ids = [];
         $reply_ids = [];
         foreach ($this->replies as $reply) {
@@ -104,13 +104,14 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         //レイアウトを使用しない
         $this->layout = false;
 
-        $reply = MODEL('Replies', $this->reply_id);
+        $_reply = MODEL('Replies', $this->reply_id);
+        $reply = [];
         $reply = [
-            'id' => $reply->id,
-            'name' => $reply->name,
-            'comment' => $reply->comment,
-            'picture' => $reply->picture,
-            'color'  => $reply->color,
+            'id' => $_reply->id,
+            'name' => $_reply->name,
+            'comment' => $_reply->comment,
+            'picture' => $_reply->picture,
+            'color'  => $_reply->color,
         ];
         return $reply;
     }
