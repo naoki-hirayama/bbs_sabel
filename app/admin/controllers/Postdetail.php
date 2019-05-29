@@ -73,7 +73,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         $this->title = "削除完了";
         $this->post = MODEL('Posts', $this->param);
         
-        if (!$this->post->isSelected()) {
+        if ($this->post->isSelected()) {
             $this->notfound();
             return;
         }
