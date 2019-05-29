@@ -95,16 +95,14 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
     public function reply_get_ajax()
     {
-        $_reply = MODEL('Replies', $this->reply_id);
-        $reply = [];
-        $reply = [
-            'id' => $_reply->id,
-            'name' => $_reply->name,
-            'comment' => $_reply->comment,
-            'picture' => $_reply->picture,
-            'color'  => $_reply->color,
-        ];
-        return $reply;
+        $reply = MODEL('Replies', $this->reply_id);
+
+        if (!$reply->isSelected()) {
+            $this->notFound();
+            return;
+        }
+
+        return $reply->toArray();
     }
 
     public function reply_edit_ajax()
