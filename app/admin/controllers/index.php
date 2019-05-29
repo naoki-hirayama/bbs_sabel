@@ -60,18 +60,14 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 
     public function get_ajax()
     {
-        $this->layout = false;
+        $post = MODEL('Posts', $this->id);
 
-        $_post = MODEL('Posts', $this->id);
-        $post = [];
-        $post = [
-            'id' => $_post->id,
-            'name' => $_post->name,
-            'comment' => $_post->comment,
-            'picture' => $_post->picture,
-            'color'  => $_post->color,
-        ];
-        return $post;
+        if (!$post->isSelected()) {
+            $this->notFound();
+            return;
+        }
+        
+        return $post->toArray();
     }
 
     public function edit_ajax()
