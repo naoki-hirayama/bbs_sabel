@@ -7,9 +7,9 @@
         <div id="post_name">
             <? if (!is_empty($post->user_id)) : ?>
                 <?= $user->name ?><br />
-            <?php else : ?>
+            <? else : ?>
                 <?= $post->name ?><br />
-            <?php endif ?>
+            <? endif ?>
         </div>
         本文 :
         <font id="post_color" color="<?= $post->color ?>">
@@ -84,8 +84,7 @@
     <h1>投稿編集</h1>
     <div class="modalwin-contents">
         <input id="input_id" type="hidden" name="name" value="">
-        <input id="input_name" type="text" name="name" value="">
-        <br />
+        <input id="input_name" type="text" name="name" value=""><br />
         <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="img" src="" width="30" height="30"><br />
         <select id="input_color" name="color">
