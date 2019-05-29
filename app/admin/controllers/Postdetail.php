@@ -38,9 +38,6 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
     public function delete()
     {
-        //レイアウトを使用しない
-        $this->layout = false;
-
         if ($this->isPost()) {
             $this->post = MODEL('Posts', $this->post_id);
 
@@ -82,9 +79,6 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
     public function reply_delete()
     {
-        //レイアウトを使用しない
-        $this->layout = false;
-
         if ($this->isPost()) {
             $this->reply = MODEL('Replies', $this->reply_id);
             //トランザクション
@@ -101,9 +95,6 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
     public function reply_get_ajax()
     {
-        //レイアウトを使用しない
-        $this->layout = false;
-
         $_reply = MODEL('Replies', $this->reply_id);
         $reply = [];
         $reply = [
@@ -118,9 +109,6 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
     public function reply_edit_ajax()
     {
-        //レイアウトを使用しない
-        $this->layout = false;
-        
         if ($this->isPost()) {
             $this->form = $form = new Forms_Replies($this->id);
 
