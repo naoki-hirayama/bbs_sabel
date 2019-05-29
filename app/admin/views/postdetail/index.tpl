@@ -23,9 +23,11 @@
         <? endif ?>
         時間：
         <?= $post->created_at ?><br />
+        <a href="<?e uri('c:index, a:index') ?>">戻る</a>
         ---------------------------------------------<br />
     </li>
 </ul>
+
 <form action="<?e uri('a: delete') ?>" method="post" id="deleteform">
     <input type="hidden" value="<?= $post->id ?>" name="post_id">
     <input type="submit" value="投稿削除">
