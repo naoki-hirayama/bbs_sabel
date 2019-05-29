@@ -21,9 +21,9 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
         $user_ids = [];
         $reply_ids = [];
-        foreach ( $this->replies as $reply) {
+        foreach ($this->replies as $reply) {
             $reply_ids[] = $reply->id;
-            if (!is_empty( $reply->user_id)) {
+            if (!is_empty($reply->user_id)) {
                 $user_ids[] = $reply->user_id;
             }
         }
