@@ -86,9 +86,9 @@
         <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="img"src="" width="30" height="30"><br />
         <select id="input_color" name="color">
-        <?php foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
-            <option value="<?php echo $key ?>"><?php echo $value; ?></option>
-        <?php endforeach ?>
+        <? foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
+            <option value="<?= $key ?>"><?= $value ?></option>
+        <? endforeach ?>
         </select>
         <br />
         <button id="ajax">編集</button>
