@@ -63,7 +63,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             }
             $this->post->delete();
 
-            $this->redirect->to('a: deleted');
+            $this->redirect->to("a: deleted, param: {$this->post_id}");
             return;
         }
     }
