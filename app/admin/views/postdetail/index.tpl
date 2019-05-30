@@ -73,10 +73,10 @@
                 <? endif ?>
             </td>
             <td>
-                <input type="button" id="edit_reply_btn" value="レス編集" class="show-reply-modal" data-reply="<?= $reply->id ?>">
+                <input type="button" value="レス編集" class="show-reply-modal" name="edit_reply_btn" data-reply="<?= $reply->id ?>">
             </td>
             <td>
-                <form action="<?e uri('a: reply_delete') ?>" method="post" id="delete_reply_form">
+                <form action="<?e uri('a: reply_delete') ?>" method="post" class="delete_reply_form">
                     <input type="hidden" value="<?= $reply->id ?>" name="reply_id">
                     <input type="submit" value="削除">
                 </form>
@@ -94,9 +94,9 @@
         <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="img" src="" width="30" height="30"><br />
         <select id="input_color" name="color">
-        <? foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
-            <option value="<?= $key ?>"><?= $value ?></option>
-        <? endforeach ?>
+            <? foreach (Posts::getSelectColorOptions() as $key => $value ): ?>
+                <option value="<?= $key ?>"><?= $value ?></option>
+            <? endforeach ?>
         </select>
         <br />
         <button id="ajax">編集</button>
@@ -115,9 +115,9 @@
         <textarea id="reply_comment" name="comment" rows="4" cols="20"></textarea><br />
         <img id="reply_img" src="" width="30" height="30"><br />
         <select id="reply_color" name="color">
-        <? foreach(Replies::getSelectColorOptions() as $key => $value) : ?>
-            <option value="<?= $key ?>"><?= $value ?></option>
-        <? endforeach ?>
+            <? foreach (Replies::getSelectColorOptions() as $key => $value ): ?>
+                <option value="<?= $key ?>"><?= $value ?></option>
+            <? endforeach ?>
         </select>
         <br />
         <button id="reply_ajax">編集</button>
@@ -127,116 +127,115 @@
 </div>
 
 <script type="text/javascript">
-    
-        $(function() {
-            $('.show-modal').on('click', function() {
-                
-                var id = $(this).data('id');
-                
-                $.ajax({
-                    url:'<?e uri('c: index, a: get_ajax') ?>',
-                    type:'GET',
-                    data:{
-                        'id': id,
-                    },
-                    dataType: 'json',
-                }).done(function(post) {
-                    $("#input_id").val(post.id);
-    				$("#input_name").val(post.name);
-    				$("#input_comment").val(post.comment);
-    				if (post.picture !== null) {
-    				    $("#img").attr('src', '/images/posts/' + post.picture);
-    				} else {
-    				    $("#img").attr('src', '/images/posts/noimage.png');
-    				}
-    				$("#input_color").val(post.color);
-                }).fail(function()  {
-                    alert("通信に失敗しました");
-                }); 
-            });
-            $('#ajax').on('click', function() {
-                
-                $.ajax({
-                    url:'<?e uri('c: index, a: edit_ajax') ?>',
-                    type:'POST',
-                    data:{
-                        'id':$("#input_id").val(),
-                        'name':$("#input_name").val(),
-                        'comment':$("#input_comment").val(),
-                        'color':$("#input_color").val(),
-                    },
-                    dataType: 'json',
-                }).done(function(response) {
-                    if (response['status'] === true) {
-                        alert("編集しました。");
-                        var post = response['post'];
-                        $('#post_name').text(post['name']);
-                        $('#post_color').text(post['comment']);
-                        $('#post_color').attr('color',　post['color']);
-                    } else {
-                        alert(response['errors']);
-                    }
-                    
-                }).fail(function()  {
-                    alert("通信に失敗しました");
-                });
-            });
-            
-            
-             $('.show-reply-modal').on('click', function() {
-                
-                var reply_id = $(this).data('reply');
-                
-                $.ajax({
-                    url:'<?e uri('c: postdetail, a: reply_get_ajax') ?>',
-                    type:'GET',
-                    data:{
-                        'reply_id': reply_id,
-                    },
-                    
-                    dataType: 'json',
-                }).done(function(reply) {
-                    
-                    $("#reply_id").val(reply.id);
-    				$("#reply_name").val(reply.name); 
-    				$("#reply_comment").val(reply.comment);
-    				if (reply.picture !== null) {
-    				    $("#reply_img").attr('src', '/images/replies/' + reply.picture);
-    				} else {
-    				    $("#reply_img").attr('src', '/images/replies/noimage.png');
-    				}
-    				$("#reply_color").val(reply.color);
-                }).fail(function() {
-                    alert("通信に失敗しました");
-                });
-            });
-                
-            $('#reply_ajax').on('click', function() {
-                
-                $.ajax({
-                    url:'<?e uri('c: postdetail, a: reply_edit_ajax') ?>',
-                    type:'POST',
-                    data:{
-                        'id':$("#reply_id").val(),
-                        'name':$("#reply_name").val(),
-                        'comment':$("#reply_comment").val(),
-                        'color':$("#reply_color").val(),
-                    },
-                    dataType: 'json',
-                }).done(function(response) {
-                    if (response['status'] === true) {
-                        alert("編集しました。");
-                        var reply = response['reply']
-                        $('#reply_name_' + reply['id']).text(reply['name']);
-                        $('#reply_font_' + reply['id']).text(reply['comment']);
-                        $('#reply_font_' + reply['id']).attr('color',　reply['color']);
-                    } else {
-                        alert(response['errors']);
-                    }
-                    
-                }).fail(function() {
-                    alert("通信に失敗しました");
-                });
+    $(function() {
+        $('.show-modal').on('click', function() {
+
+            var id = $(this).data('id');
+
+            $.ajax({
+                url: '<?e uri('c: index, a: get_ajax ') ?>',
+                type: 'GET',
+                data: {
+                    'id': id,
+                },
+                dataType: 'json',
+            }).done(function(post) {
+                $("#input_id").val(post.id);
+                $("#input_name").val(post.name);
+                $("#input_comment").val(post.comment);
+                if (post.picture !== null) {
+                    $("#img").attr('src', '/images/posts/' + post.picture);
+                } else {
+                    $("#img").attr('src', '/images/posts/noimage.png');
+                }
+                $("#input_color").val(post.color);
+            }).fail(function() {
+                alert("通信に失敗しました");
             });
         });
-    </script>
+        $('#ajax').on('click', function() {
+
+            $.ajax({
+                url: '<?e uri('c: index, a: edit_ajax ') ?>',
+                type: 'POST',
+                data: {
+                    'id': $("#input_id").val(),
+                    'name': $("#input_name").val(),
+                    'comment': $("#input_comment").val(),
+                    'color': $("#input_color").val(),
+                },
+                dataType: 'json',
+            }).done(function(response) {
+                if (response['status'] === true) {
+                    alert("編集しました。");
+                    var post = response['post'];
+                    $('#post_name').text(post['name']);
+                    $('#post_color').text(post['comment']);
+                    $('#post_color').attr('color', post['color']);
+                } else {
+                    alert(response['errors']);
+                }
+
+            }).fail(function() {
+                alert("通信に失敗しました");
+            });
+        });
+
+
+        $('.show-reply-modal').on('click', function() {
+
+            var reply_id = $(this).data('reply');
+
+            $.ajax({
+                url: '<?e uri('c: postdetail, a: reply_get_ajax') ?>',
+                type: 'GET',
+                data: {
+                    'reply_id': reply_id,
+                },
+
+                dataType: 'json',
+            }).done(function(reply) {
+
+                $("#reply_id").val(reply.id);
+                $("#reply_name").val(reply.name);
+                $("#reply_comment").val(reply.comment);
+                if (reply.picture !== null) {
+                    $("#reply_img").attr('src', '/images/replies/' + reply.picture);
+                } else {
+                    $("#reply_img").attr('src', '/images/replies/noimage.png');
+                }
+                $("#reply_color").val(reply.color);
+            }).fail(function() {
+                alert("通信に失敗しました");
+            });
+        });
+
+        $('#reply_ajax').on('click', function() {
+
+            $.ajax({
+                url: '<?e uri('c: postdetail, a: reply_edit_ajax ') ?>',
+                type: 'POST',
+                data: {
+                    'id': $("#reply_id").val(),
+                    'name': $("#reply_name").val(),
+                    'comment': $("#reply_comment").val(),
+                    'color': $("#reply_color").val(),
+                },
+                dataType: 'json',
+            }).done(function(response) {
+                if (response['status'] === true) {
+                    alert("編集しました。");
+                    var reply = response['reply']
+                    $('#reply_name_' + reply['id']).text(reply['name']);
+                    $('#reply_font_' + reply['id']).text(reply['comment']);
+                    $('#reply_font_' + reply['id']).attr('color', reply['color']);
+                } else {
+                    alert(response['errors']);
+                }
+
+            }).fail(function() {
+                alert("通信に失敗しました");
+            });
+        });
+    });
+</script>
