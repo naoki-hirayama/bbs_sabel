@@ -18,14 +18,14 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 
         $finder = finder('Posts');
         
-        if (!is_null($this->name)) {
-            $finder->contains('name', $this->name);
+        if (!is_null($form->name)) {
+            $finder->contains('name', $form->name);
         }
-        if (!is_null($this->comment)) {
-            $finder->contains('comment', $this->comment);
+        if (!is_null($form->comment)) {
+            $finder->contains('comment', $form->comment);
         }
-        if (!is_null($this->color)) {
-            $finder->eq('color', $this->color);
+        if (!is_null($form->color)) {
+            $finder->eq('color', $form->color);
         }
 
         $finder->sort('id', 'desc');
