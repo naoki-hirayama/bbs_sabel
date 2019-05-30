@@ -44,6 +44,7 @@
         <th>投稿日時</th>
         <th>名前</th>
         <th>本文</th>
+        <th>ユーザー</th>
         <th>編集リンク</th>
         <th>削除ボタン</th>
     </tr>
@@ -57,16 +58,19 @@
             </td>
 
             <td id="reply_name_<?= $reply->id ?>">
-                <? if (!is_empty($reply->user_id)) : ?>
-                    <?= $user_names[$reply->user_id] ?>
-                <? else : ?>
-                    <?= $reply->name ?>
-                <? endif ?>
+                <?= $reply->name ?>
             </td>
             <td>
                 <font id="reply_font_<?= $reply->id ?>" color="<?= $reply->color ?>">
                     <?= $reply->comment ?>
                 </font>
+            </td>
+            <td>
+                <? if (!is_empty($reply->user_id)) : ?>
+                    <?= $user_names[$reply->user_id] ?>
+                <? else : ?>
+                    無し
+                <? endif ?>
             </td>
             <td>
                 <input type="button" id="edit_reply_btn" value="レス編集" class="show-reply-modal" data-reply="<?= $reply->id ?>">
