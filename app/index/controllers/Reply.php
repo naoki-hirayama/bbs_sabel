@@ -28,13 +28,13 @@ class Index_Controllers_Reply extends Index_Controllers_Base
 
         if ($this->isPost()) {
 
-            $form->submit($this->POST_VARS, array(
+            $form->submit($this->POST_VARS, [
                 'name',
                 'comment',
                 'color',
                 'picture',
                 'password',
-            ));
+            ]);
 
             if (!$form->validate()) {
                 $this->errors = $form->getErrors();
