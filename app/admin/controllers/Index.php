@@ -48,10 +48,8 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 ->sort('id', 'desc')
                 ->fetchArray('name');
         }
-
-        if (!is_empty($post_ids)) {
-            $this->reply_counts = Replies::fetchReplyCountByPostIds($post_ids);
-        }
+        
+        $this->reply_counts = Replies::fetchReplyCountByPostIds($post_ids);
         
     }
 
