@@ -59,12 +59,12 @@ class Index_Controllers_Auth extends Index_Controllers_Base
         $this->form = $form = new Forms_Users();
 
         if ($this->isPost()) {
-            $form->submit($this->POST_VARS, array(
+            $form->submit($this->POST_VARS, [
                 'name',
                 'login_id',
                 'password',
                 'confirm_password',
-            ));
+            ]);
 
             if (!$form->validate()) {
                 $this->errors = $form->getErrors();
