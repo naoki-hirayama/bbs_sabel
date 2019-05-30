@@ -27,18 +27,18 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         
         if ($this->isPost()) {
             if (is_empty($this->picture)) {
-                $form->submit($this->POST_VARS, array(
+                $form->submit($this->POST_VARS, [
                     'name',
                     'login_id',
                     'comment',
-                ));
+                ]);
             } else {
-                $form->submit($this->POST_VARS, array(
+                $form->submit($this->POST_VARS, [
                     'name',
                     'login_id',
                     'comment',
                     'picture',
-                ));
+                ]);
             }
 
             if (!$form->validate()) {
@@ -90,11 +90,11 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         if ($this->isPost()) {
             $errors = [];
 
-            $form->submit($this->POST_VARS, array(
+            $form->submit($this->POST_VARS, [
                 'current_password',
                 'password',
                 'confirm_password',
-            ));
+            ]);
 
             if (!password_verify($form->current_password, $this->LOGIN_USER->password)) {
                 $errors[] = $form->n('current_password') . "が一致しません";
