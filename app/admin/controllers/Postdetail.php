@@ -108,11 +108,11 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         if ($this->isPost()) {
             $this->form = $form = new Forms_Replies($this->id);
 
-            $form->submit($this->POST_VARS, array(
+            $form->submit($this->POST_VARS, [
                 'name',
                 'comment',
                 'color',
-            ));
+            ]);
 
             $response = [];
             if (!$form->validate()) {
