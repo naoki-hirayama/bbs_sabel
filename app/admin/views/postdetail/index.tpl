@@ -5,12 +5,14 @@
         <?= $post->id ?><br />
         名前 :
         <div id="post_name">
-            <? if (!is_empty($post->user_id)) : ?>
-                <?= $user->name ?><br />
-            <? else : ?>
-                <?= $post->name ?><br />
-            <? endif ?>
+            <?= $post->name ?>
         </div>
+        ユーザー :
+        <? if (!is_empty($post->user_id)) : ?>
+            <?= $user->name ?><br />
+        <? else : ?>
+            無し<br />
+        <? endif ?>
         本文 :
         <font id="post_color" color="<?= $post->color ?>">
             <?= $post->comment ?>
