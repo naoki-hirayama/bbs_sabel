@@ -2,21 +2,21 @@
 
 class Forms_Posts extends  Form_Model
 {
-    protected $displayNames = array(
+    protected $displayNames = [
         'name'             => '名前',
         'comment'          => '本文',
         'picture'          => '写真',
         'color'            => '文字色',
         'password'         => 'パスワード',
-    );
+    ];
 
-    protected $validators = array(
-        'name'                  => array( '-strwidth', 'strlen(' . Posts::MAX_NAME_LENGTH . ')'),
-        'comment'               => array( '-strwidth', 'strlen(' . Posts::MAX_COMMENT_LENGTH . ')'),
-        'picture'               => array( '-strwidth', 'image("' . (Posts::MAX_PICTURE_SIZE / 1024 / 1024) . 'M")'),
-        'color'                 => array('validateColor'),
-        'password'              => array( '-strwidth', 'validatePasswordLength', 'alnum'),
-    );
+    protected $validators = [
+        'name'                  => ['-strwidth', 'strlen(' . Posts::MAX_NAME_LENGTH . ')'],
+        'comment'               => ['-strwidth', 'strlen(' . Posts::MAX_COMMENT_LENGTH . ')'],
+        'picture'               => ['-strwidth', 'image("' . (Posts::MAX_PICTURE_SIZE / 1024 / 1024) . 'M")'],
+        'color'                 => ['validateColor'],
+        'password'              => ['-strwidth', 'validatePasswordLength', 'alnum'],
+    ];
     
     //パスワード
     public function validatePasswordLength($name, $value)
