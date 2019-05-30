@@ -81,14 +81,11 @@ class Index_Controllers_Reply extends Index_Controllers_Base
             return;
         }
 
-        if ($this->IS_LOGIN && $this->reply->user_id !== $this->LOGIN_USER->id && is_empty($this->reply->password)) {
-            $this->notFound();
-            return;
-        }
-
-        if (!$this->IS_LOGIN && !is_empty($this->reply->user_id)) {
-            $this->notFound();
-            return;
+        if (!is_empty($this->reply->user_id)) {
+            if (!$this->IS_LOGIN || $this->reply->user_id !== $this->LOGIN_USER->id) {
+                $this->notFound();
+                return;
+            }
         }
 
         if ($this->isPost()) {
