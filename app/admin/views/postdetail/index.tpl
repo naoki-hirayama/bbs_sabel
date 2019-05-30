@@ -1,4 +1,5 @@
 <h1>投稿詳細</h1>
+
 <ul>
     <li>
         投稿ID:
@@ -56,7 +57,6 @@
             <td>
                 <?= $reply->created_at ?>
             </td>
-
             <td id="reply_name_<?= $reply->id ?>">
                 <?= $reply->name ?>
             </td>
