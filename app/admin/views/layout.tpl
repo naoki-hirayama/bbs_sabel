@@ -6,10 +6,10 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <link rel="stylesheet" href="/admin/css/modal.css" type="text/css" />
-        <title><?php echo $title ?></title>
+        <title><?e $title ?></title>
     </head>
     <body>
-        <?php echo $contentForLayout ?>
+        <?e $contentForLayout ?>
     </body>
     <script src="/admin/js/modal.js"></script>
     <script src="/admin/js/admin.js"></script>

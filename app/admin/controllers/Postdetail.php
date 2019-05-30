@@ -74,7 +74,6 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         }
     }
 
-
     public function reply_delete()
     {
         if ($this->isPost()) {
