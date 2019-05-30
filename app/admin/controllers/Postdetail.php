@@ -10,7 +10,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
         $this->user = MODEL('Users', $this->post->user_id);
 
         if (!$this->post->isSelected()) {
-            $this->notfound();
+            $this->notFound();
             return;
         }
 
@@ -127,7 +127,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
             $response = [
                 'status' => true,
-                'reply'   => $this->POST_VARS,
+                'reply'  => $this->POST_VARS,
             ];
 
             $form->save();
