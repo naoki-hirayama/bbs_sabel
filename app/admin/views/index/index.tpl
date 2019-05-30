@@ -73,7 +73,8 @@
         <input id="input_id" type="hidden" name="name" value="">
         <input id="input_name" type="text" name="name" value="">
         <br />
-        <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea><br />
+        <textarea id="input_comment" name="comment" rows="4" cols="20"></textarea>
+        <br />
         <img id="img"src="" width="30" height="30"><br />
         <select id="input_color" name="color">
         <? foreach(Posts::getSelectColorOptions() as $key => $value) : ?>
