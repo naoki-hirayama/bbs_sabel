@@ -50,12 +50,9 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         }
 
         if (!is_empty($post_ids)) {
-            $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $post_ids) . ") GROUP BY post_id");
-
-            if (!is_empty($tmp)) {
-                $this->reply_counts = array_column($tmp, 'cnt', 'post_id');
-            }
+            $this->reply_counts = Replies::fetchReplyCountByPostIds($post_ids);
         }
+        
     }
 
     public function get_ajax()

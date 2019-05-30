@@ -12,4 +12,13 @@ class Replies extends Sabel_Db_Model
     {
         return ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
     }
+
+    public static function fetchReplyCountByPostIds($post_ids)
+    {
+        $tmp = db_query("SELECT post_id, COUNT(*) AS cnt FROM replies WHERE post_id IN (" . implode(',', $post_ids) . ") GROUP BY post_id");
+
+        if (!is_empty($tmp)) {
+            return array_column($tmp, 'cnt', 'post_id');
+        }
+    }
 }
