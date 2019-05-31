@@ -98,7 +98,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
         // パスワード未設定かつ特定のユーザーの投稿ではない場合は削除不可
         if (is_empty($this->post->password) && is_empty($this->post->user_id)) {
             $this->notFound();
-            return; 
+            return;
         }
         //user_idが存在する時で、ログインユーザーでない時、またはuser_idとログインユーザーのidが一致しない時
         if (!is_empty($this->post->user_id)) {
@@ -114,25 +114,36 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $this->errors = ["パスワードが違います。"];
                 return;
             }
-            //トランザクション
-            $replies = finder('Replies')
-                       ->eq('post_id', $this->param)
-                       ->fetchArray();
-            
-            if (!is_empty($replies)) {
-                foreach ($replies as $reply) {
-                    unlink("images/replies/{$reply['picture']}");
-                }
-            }
-            
-            $post_repleis = MODEL('Replies');
-            $post_repleis->setCondition(eq('post_id', $this->param));
-            $post_repleis->delete();
 
-            if (!is_empty($this->post->picture)) {
-                unlink("images/posts/{$this->post->picture}");
+            Sabel_Db_Transaction::activate();
+
+            try {
+                $replies = finder('Replies')
+                    ->eq('post_id', $this->param)
+                    ->fetchArray();
+
+                $post_repleis = MODEL('Replies');
+                $post_repleis->setCondition(eq('post_id', $this->param));
+                $post_repleis->delete();
+
+                $this->post->delete();
+
+                Sabel_Db_Transaction::commit();
+
+                if (!is_empty($replies)) {
+                    foreach ($replies as $reply) {
+                        unlink("images/replies/{$reply['picture']}");
+                    }
+                }
+
+                if (!is_empty($this->post->picture)) {
+                    unlink("images/posts/{$this->post->picture}");
+                }
+
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
             }
-            $this->post->delete();
 
             $this->redirect->to('a: deleted');
             return;
