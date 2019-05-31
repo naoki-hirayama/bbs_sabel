@@ -88,17 +88,25 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
     public function reply_delete()
     {
         if ($this->isPost()) {
-            $this->reply = MODEL('Replies', $this->reply_id);
-            //トランザクション
-            if (!is_empty($this->reply->picture)) {
-                unlink("images/replies/{$this->reply->picture}");
-            }
-            $this->reply->delete();
 
+            Sabel_Db_Transaction::activate();
+
+            try {
+                $this->reply = MODEL('Replies', $this->reply_id);
+                $this->reply->delete();
+
+                Sabel_Db_Transaction::commit();
+                if (!is_empty($this->reply->picture)) {
+                    unlink("images/replies/{$this->reply->picture}");
+                }
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
+            
             $this->redirect->to("a: index, param: {$this->reply->post_id}");
             return;
         }
-
     }
 
     public function reply_get_ajax()
