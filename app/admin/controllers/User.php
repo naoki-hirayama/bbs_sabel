@@ -40,39 +40,49 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 $posts = finder('Posts')
                     ->eq('user_id', $this->user_id)
                     ->fetchArray();
+
                 $post_ids = [];
-                
+                $post_pics = [];
                 foreach ($posts as $post) {
                     $post_ids[] = $post['id'];
+                    $post_pics[] = $post['picture'];
                 }
                 
                 if (!is_empty($post_ids)) {
-                    $replies = MODEL('Replies');
-                    $replies->setCondition(in('post_id', $post_ids));
-                    $replies->delete();
+                    $replies_by_users = MODEL('Replies');
+                    $replies_by_users->setCondition(in('post_id', $post_ids));
+                    $replies_by_users->delete();
                 }
 
                 $replies = MODEL('Replies');
                 $replies->setCondition(eq('user_id', $this->user_id));
                 $replies->delete();
-
+                
                 $posts = MODEL('Posts');
                 $posts->setCondition(eq('user_id', $this->user_id));
                 $posts->delete();
                 
+                
                 $user = MODEL('Users', $this->user_id);
                 $user->delete();
-                
-                Sabel_Db_Transaction::commit();
-                // if (!is_empty($user)) {
-                //     unlink("images/users/{$user['picture']}");
-                // }
 
-                // if (!is_empty($replies)) {
-                //     foreach ($replies as $reply) {
-                //         unlink("images/replies/{$reply['picture']}");
-                //     }
-                // }
+                Sabel_Db_Transaction::commit();
+                if (!is_empty($user)) {
+                    unlink("images/users/{$user->picture}");
+                }
+                
+                if (!is_empty($replies)) {
+                    foreach ($replies as $reply) {
+                        unlink("images/replies/{$reply['picture']}");
+                    }
+                }
+
+                if (!is_empty($posts)) {
+                    foreach ($post_pics as $post_pic) {
+                        unlink("images/posts/{$post_pic}");
+                    }
+                }
+                
             } catch (Exception $e) {
                 Sabel_Db_Transaction::rollback();
                 throw $e;
