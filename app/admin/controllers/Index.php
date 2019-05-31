@@ -9,48 +9,39 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         $per_page_records = 10;
 
         $this->form = $form = new Forms_Posts();
-        
+
         $form->submit($this->GET_VARS, [
             'name',
             'comment',
             'color',
         ]);
 
-        $finder = finder('Posts');
+        $finder = finder('Posts')
+            ->leftJoin('Users', ['user_id' => 'id', 'fkey' => 'user_id']);
         
         if (!is_null($form->name)) {
-            $finder->contains('name', $form->name);
+            $finder->contains('Posts.name', $form->name);
         }
         if (!is_null($form->comment)) {
-            $finder->contains('comment', $form->comment);
+            $finder->contains('Posts.comment', $form->comment);
         }
         if (!is_null($form->color)) {
-            $finder->eq('color', $form->color);
+            $finder->eq('Posts.color', $form->color);
         }
 
-        $finder->sort('id', 'desc');
+        $finder->sort('Posts.id', 'desc');
+    
 
         $paginator = new Paginator($finder);
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
-        
+
         $user_ids = [];
         $post_ids = [];
         foreach ($paginator->results as $post) {
             $post_ids[] = $post->id;
-            if (!is_empty($post->user_id)) {
-                $user_ids[] = $post->user_id;
-            }
-        }
-
-        if (!is_empty($user_ids)) {
-            $this->user_names = finder('Users')
-                ->in('id', $user_ids)
-                ->sort('id', 'desc')
-                ->fetchArray('name');
         }
         
         $this->reply_counts = Replies::fetchReplyCountByPostIds($post_ids);
-        
     }
 
     public function get_ajax()
