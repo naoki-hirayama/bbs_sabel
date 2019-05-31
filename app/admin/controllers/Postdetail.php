@@ -37,26 +37,37 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
     public function delete()
     {
         if ($this->isPost()) {
-            $this->post = MODEL('Posts', $this->post_id);
 
-            $replies = finder('Replies')
-                ->eq('post_id', $this->post_id)
-                ->fetchArray();
+            Sabel_Db_Transaction::activate();
 
-            if (!is_empty($replies)) {
-                foreach ($replies as $reply) {
-                    unlink("images/replies/{$reply['picture']}");
+            try {
+                $this->post = MODEL('Posts', $this->post_id);
+
+                $replies = finder('Replies')
+                    ->eq('post_id', $this->post_id)
+                    ->fetchArray();
+
+                $post_repleis = MODEL('Replies');
+                $post_repleis->setCondition(eq('post_id', $this->post_id));
+                $post_repleis->delete();
+
+                $this->post->delete();
+
+                Sabel_Db_Transaction::commit();
+
+                if (!is_empty($replies)) {
+                    foreach ($replies as $reply) {
+                        unlink("images/replies/{$reply['picture']}");
+                    }
                 }
-            }
 
-            $post_repleis = MODEL('Replies');
-            $post_repleis->setCondition(eq('post_id', $this->post_id));
-            $post_repleis->delete();
-
-            if (!is_empty($this->post->picture)) {
-                unlink("images/posts/{$this->post->picture}");
+                if (!is_empty($this->post->picture)) {
+                    unlink("images/posts/{$this->post->picture}");
+                }
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
             }
-            $this->post->delete();
 
             $this->redirect->to("a: deleted, param: {$this->post_id}");
             return;
