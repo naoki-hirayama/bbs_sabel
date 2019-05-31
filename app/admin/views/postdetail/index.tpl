@@ -73,7 +73,7 @@
                 <? endif ?>
             </td>
             <td>
-                <input type="button" value="レス編集" class="show-reply-modal" name="edit_reply_btn" data-reply="<?= $reply->id ?>">
+                <input type="button" value="レス編集" class="show-reply-modal" data-reply="<?= $reply->id ?>">
             </td>
             <td>
                 <form action="<?e uri('a: reply_delete') ?>" method="post" class="delete_reply_form">
