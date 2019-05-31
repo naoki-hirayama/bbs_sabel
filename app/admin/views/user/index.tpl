@@ -55,7 +55,10 @@
                     <a href=""  <?e uri("c: user, a: edit, param: {$user->id}") ?>">編集</a>
                 </td>
                 <td>
-                    <a href=""  <?e uri("c: user, a: delete, param: {$user->id}") ?>">削除</a>
+                    <form action="<?e uri('a: delete') ?>" method="post">
+                        <input type="hidden" value="<?= $user->id ?>" name="user_id">
+                        <input type="submit" value="削除">
+                    </form>
                 </td>
             </tr>
         </foreach>
