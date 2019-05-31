@@ -67,7 +67,6 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 
     public function edit_ajax()
     {
-        $this->layout = false;
         if ($this->isPost()) {
             $this->form = $form = new Forms_Posts($this->id);
 
