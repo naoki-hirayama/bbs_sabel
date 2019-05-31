@@ -2,6 +2,9 @@
 
 class Index_Controllers_Auth extends Index_Controllers_Base
 {
+    /**
+     * @trim login_id password
+     */
     public function login()
     {
         $this->title = "ログイン画面";
@@ -46,7 +49,9 @@ class Index_Controllers_Auth extends Index_Controllers_Base
 
         $this->session->destroy();
     }
-
+    /**
+     * @trim name login_id password confirm_password
+     */
     public function register()
     {
         $this->title = "登録画面";

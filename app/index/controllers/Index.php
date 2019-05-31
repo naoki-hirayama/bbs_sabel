@@ -2,6 +2,9 @@
 
 class Index_Controllers_Index extends Index_Controllers_Base
 {
+    /**
+     * @trim name comment password
+     */
     public function index()
     {
         $this->title = "投稿一覧";

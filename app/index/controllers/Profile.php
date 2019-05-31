@@ -14,6 +14,9 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         }
     }
 
+    /**
+     * @trim name login_id comment
+     */
     public function edit()
     {
         if (!$this->IS_LOGIN) {
@@ -69,6 +72,9 @@ class Index_Controllers_Profile extends Index_Controllers_Base
         }
     }
 
+    /**
+     * @trim current_password password cofirm_password
+     */
     public function password()
     {
         if (!$this->IS_LOGIN) {
