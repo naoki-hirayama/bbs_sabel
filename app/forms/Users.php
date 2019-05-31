@@ -2,7 +2,7 @@
 
 class Forms_Users extends Form_Model
 {
-    protected $displayNames = [
+    protected $displayNames = [
         'name'             => '名前',
         'login_id'         => 'ログインID',
         'password'         => 'パスワード',
