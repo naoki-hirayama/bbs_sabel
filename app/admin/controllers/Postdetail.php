@@ -101,7 +101,10 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
         return $reply->toArray();
     }
-
+    
+    /**
+     * @trim name comment
+     */
     public function reply_edit_ajax()
     {
         if ($this->isPost()) {

@@ -64,7 +64,9 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         
         return $post->toArray();
     }
-
+    /**
+     * @trim name comment
+     */
     public function edit_ajax()
     {
         if ($this->isPost()) {
