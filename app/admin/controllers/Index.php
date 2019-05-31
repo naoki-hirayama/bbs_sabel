@@ -4,7 +4,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
 {
     public function index()
     {
-        $this->title = "管理画面";
+        $this->title = "投稿管理画面";
 
         $per_page_records = 10;
 
@@ -35,7 +35,6 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         $paginator = new Paginator($finder);
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
 
-        $user_ids = [];
         $post_ids = [];
         foreach ($paginator->results as $post) {
             $post_ids[] = $post->id;
