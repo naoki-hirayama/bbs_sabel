@@ -97,13 +97,21 @@ class Index_Controllers_Reply extends Index_Controllers_Base
                 $this->errors = ["パスワードが違います。"];
                 return;
             }
-            //トランザクション
             
-            if (!is_empty($this->reply->picture)) {
-                unlink("images/replies/{$this->reply->picture}");
-            }
-            $this->reply->delete();
+            Sabel_Db_Transaction::activate();
 
+            try {
+                $this->reply->delete();
+                Sabel_Db_Transaction::commit();
+
+                if (!is_empty($this->reply->picture)) {
+                    unlink("images/replies/{$this->reply->picture}");
+                }
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
+            
             $this->redirect->to("a: deleted, param: {$this->reply->post_id}");
             return;
         }
