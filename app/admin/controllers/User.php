@@ -24,6 +24,8 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             $finder->contains('login_id', $form->login_id);
         }
 
+        $finder->sort('id', 'desc');
+
         $paginator = new Paginator($finder);
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
 
@@ -56,11 +58,17 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 }
                 
                 if (!is_empty($post_ids)) {
+                    $replies_by_users_pictures = finder('Replies')
+                        ->in('post_id', $post_ids)
+                        ->fetchArray();
                     $replies_by_users = MODEL('Replies');
                     $replies_by_users->setCondition(in('post_id', $post_ids));
                     $replies_by_users->delete();
                 }
 
+                $replies_pictures = finder('Replies')
+                    ->eq('user_id', $this->user_id)
+                    ->fetchArray();
                 $replies = MODEL('Replies');
                 $replies->setCondition(eq('user_id', $this->user_id));
                 $replies->delete();
@@ -78,15 +86,21 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                     unlink("images/users/{$user->picture}");
                 }
                 
-                if (!is_empty($replies)) {
-                    foreach ($replies as $reply) {
-                        unlink("images/replies/{$reply['picture']}");
+                if (!is_empty($replies_pictures)) {
+                    foreach ($replies_pictures as $replies_picture) {
+                        unlink("images/replies/{$replies_picture['picture']}");
                     }
                 }
 
                 if (!is_empty($posts)) {
                     foreach ($post_images as $post_image) {
                         unlink("images/posts/{$post_image}");
+                    }
+                }
+
+                if (!is_empty($replies_by_users_pictures)) {
+                    foreach ($replies_by_users_pictures as $replies_by_users_picture) {
+                        unlink("images/replies/{$replies_by_users_picture['picture']}");
                     }
                 }
                 
