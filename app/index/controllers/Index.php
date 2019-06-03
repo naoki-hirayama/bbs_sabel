@@ -126,9 +126,8 @@ class Index_Controllers_Index extends Index_Controllers_Base
             Sabel_Db_Transaction::activate();
 
             try {
-                $replies = finder('Replies')
-                    ->eq('post_id', $this->param)
-                    ->fetchArray();
+                $replies_model = new Replies;
+                $replies = $replies_model->fetchByPostId($this->param);
 
                 $post_repleis = MODEL('Replies');
                 $post_repleis->setCondition(eq('post_id', $this->param));
@@ -140,7 +139,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
                 if (!is_empty($replies)) {
                     foreach ($replies as $reply) {
-                        unlink("images/replies/{$reply['picture']}");
+                        unlink("images/replies/{$reply->picture}");
                     }
                 }
 

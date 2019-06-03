@@ -120,9 +120,9 @@ class Admin_Controllers_User extends Admin_Controllers_Base
         $this->title = "ユーザー編集画面";
 
         $this->user = MODEL('Users', $this->param);
-
+        
         if (!$this->user->isSelected()) {
-            $this->notFound();
+            $this->notfound();
             return;
         }
 
@@ -187,6 +187,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
     public function edited()
     {
         $this->title = "ユーザー編集完了画面";
+
     }
     
 }
