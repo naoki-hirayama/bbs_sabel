@@ -40,11 +40,10 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
             try {
                 $this->post = MODEL('Posts', $this->post_id);
+                $replies_model = new Replies;
 
-                $replies = finder('Replies')
-                    ->eq('post_id', $this->post_id)
-                    ->fetchArray();
-
+                $replies = $replies_model->fetchByPostId($this->post_id);
+                
                 $post_repleis = MODEL('Replies');
                 $post_repleis->setCondition(eq('post_id', $this->post_id));
                 $post_repleis->delete();
@@ -55,7 +54,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
                 if (!is_empty($replies)) {
                     foreach ($replies as $reply) {
-                        unlink("images/replies/{$reply['picture']}");
+                        unlink("images/replies/{$reply->picture}");
                     }
                 }
 
