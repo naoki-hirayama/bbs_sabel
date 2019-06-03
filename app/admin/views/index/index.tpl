@@ -7,9 +7,9 @@
     <?= $form->n('name') ?>：
     <?e $form->text('name') ?><br />
     <?= $form->n('comment') ?>：
-     <?e $form->text('comment') ?><br />
+    <?e $form->text('comment') ?><br />
     <?= $form->n('color') ?>：
-     <?e $form->select('color', [null => '-'] + Posts::getSelectColorOptions()) ?>
+    <?e $form->select('color', [null => '-'] + Posts::getSelectColorOptions()) ?>
     <input type="submit" value="検索"><br />
 </form>
 

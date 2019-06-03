@@ -42,10 +42,10 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                     ->fetchArray();
 
                 $post_ids = [];
-                $post_pics = [];
+                $post_images = [];
                 foreach ($posts as $post) {
                     $post_ids[] = $post['id'];
-                    $post_pics[] = $post['picture'];
+                    $post_images[] = $post['picture'];
                 }
                 
                 if (!is_empty($post_ids)) {
@@ -78,8 +78,8 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 }
 
                 if (!is_empty($posts)) {
-                    foreach ($post_pics as $post_pic) {
-                        unlink("images/posts/{$post_pic}");
+                    foreach ($post_images as $post_image) {
+                        unlink("images/posts/{$post_image}");
                     }
                 }
                 
@@ -96,6 +96,5 @@ class Admin_Controllers_User extends Admin_Controllers_Base
     public function edit()
     {
         $this->title = "ユーザー編集画面";
-
     }
 }
