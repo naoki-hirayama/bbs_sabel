@@ -80,7 +80,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 
                 Sabel_Db_Transaction::commit();
                 
-                if (!is_empty($user)) {
+                if (!is_empty($user->picture)) {
                     unlink("images/users/{$user->picture}");
                 }
                 
