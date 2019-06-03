@@ -13,7 +13,7 @@ class Posts extends Sabel_Db_Model
         return ['black' => '黒', 'red' => '赤', 'blue' => '青', 'yellow' => '黄', 'green' => '緑'];
     }
 
-    public function fetchPostCountByUserIds($user_ids)
+    public static function fetchPostCountByUserIds($user_ids)
     {
         if (!is_empty($user_ids)) {
             $tmp = db_query("SELECT user_id, COUNT(*) AS cnt FROM posts WHERE user_id IN (" . implode(',', $user_ids) . ") GROUP BY user_id");
