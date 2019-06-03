@@ -59,10 +59,17 @@ class Index_Controllers_Reply extends Index_Controllers_Base
                 $form->user_id = $this->LOGIN_USER->id;
             }
                 
-
             $form->post_id = $this->post->id;
 
-            $form->save();
+            Sabel_Db_Transaction::activate();
+
+            try {
+                $form->save();
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
+                
             $this->redirect->to("a: index, param: {$this->post->id}");
             return;
         }
