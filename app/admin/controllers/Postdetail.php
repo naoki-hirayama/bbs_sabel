@@ -149,7 +149,15 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
                 'reply'  => $this->POST_VARS,
             ];
 
-            $form->save();
+            Sabel_Db_Transaction::activate();
+            try {
+                $form->save();
+                Sabel_Db_Transaction::commit();
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
+
             return $response;
         }
     }
