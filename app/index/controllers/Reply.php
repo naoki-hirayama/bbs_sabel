@@ -65,6 +65,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
 
             try {
                 $form->save();
+                Sabel_Db_Transaction::commit();
             } catch (Exception $e) {
                 Sabel_Db_Transaction::rollback();
                 throw $e;

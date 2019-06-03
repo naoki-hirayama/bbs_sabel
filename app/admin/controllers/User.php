@@ -48,19 +48,19 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             try {
                 $posts = finder('Posts')
                     ->eq('user_id', $this->user_id)
-                    ->fetchArray();
+                    ->fetchAll();
 
                 $post_ids = [];
                 $post_images = [];
                 foreach ($posts as $post) {
-                    $post_ids[] = $post['id'];
-                    $post_images[] = $post['picture'];
+                    $post_ids[] = $post->id;
+                    $post_images[] = $post->picture;
                 }
                 
                 if (!is_empty($post_ids)) {
                     $replies_by_users_pictures = finder('Replies')
                         ->in('post_id', $post_ids)
-                        ->fetchArray();
+                        ->fetchAll();
                     $replies_by_users = MODEL('Replies');
                     $replies_by_users->setCondition(in('post_id', $post_ids));
                     $replies_by_users->delete();
@@ -68,7 +68,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
 
                 $replies_pictures = finder('Replies')
                     ->eq('user_id', $this->user_id)
-                    ->fetchArray();
+                    ->fetchAll();
                 $replies = MODEL('Replies');
                 $replies->setCondition(eq('user_id', $this->user_id));
                 $replies->delete();
@@ -88,7 +88,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 
                 if (!is_empty($replies_pictures)) {
                     foreach ($replies_pictures as $replies_picture) {
-                        unlink("images/replies/{$replies_picture['picture']}");
+                        unlink("images/replies/{$replies_picture->picture}");
                     }
                 }
 
@@ -100,7 +100,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
 
                 if (!is_empty($replies_by_users_pictures)) {
                     foreach ($replies_by_users_pictures as $replies_by_users_picture) {
-                        unlink("images/replies/{$replies_by_users_picture['picture']}");
+                        unlink("images/replies/{$replies_by_users_picture->picture}");
                     }
                 }
                 
