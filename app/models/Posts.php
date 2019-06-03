@@ -17,7 +17,7 @@ class Posts extends Sabel_Db_Model
     {
         if (!is_empty($user_ids)) {
             $tmp = db_query("SELECT user_id, COUNT(*) AS cnt FROM posts WHERE user_id IN (" . implode(',', $user_ids) . ") GROUP BY user_id");
-            dump($tmp);
+            
             if (!is_empty($tmp)) {
                 return array_column($tmp, 'cnt', 'user_id');
             }
