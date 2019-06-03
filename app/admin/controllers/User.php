@@ -113,7 +113,9 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             return;
         }
     }
-
+    /**
+     * @trim name login_id
+     */
     public function edit()
     {
         $this->title = "ユーザー編集画面";
