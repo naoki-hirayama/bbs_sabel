@@ -75,11 +75,19 @@ class Index_Controllers_Auth extends Index_Controllers_Base
                 $this->errors = $form->getErrors();
                 return;
             }
-            
+
             $this->form->remove('confirm_password');
             $this->form->getModel()->unsetValue('confirm_password');
             $form->password = password_hash($form->password, PASSWORD_DEFAULT);
-            $form->save();
+           
+            Sabel_Db_Transaction::activate();
+            try {
+                $form->save();
+                Sabel_Db_Transaction::commit();
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
             
             $this->session->write('user_id', $this->form->getModel()->id);
 
