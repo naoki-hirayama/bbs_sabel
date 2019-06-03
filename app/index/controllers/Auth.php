@@ -75,7 +75,7 @@ class Index_Controllers_Auth extends Index_Controllers_Base
                 $this->errors = $form->getErrors();
                 return;
             }
-
+            
             $this->form->remove('confirm_password');
             $this->form->getModel()->unsetValue('confirm_password');
             $form->password = password_hash($form->password, PASSWORD_DEFAULT);
