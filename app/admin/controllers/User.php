@@ -148,23 +148,35 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 return;
             }
 
-            if (!is_empty($this->picture)) {
-                $posted_picture = $form->picture->path;
-                $finfo = new finfo(FILEINFO_MIME_TYPE);
-                $picture_type = $finfo->file($posted_picture);
-                $specific_num = uniqid(mt_rand());
-                $rename_file = $specific_num . '.' . basename($picture_type);
-                $rename_file_path = 'images/users/' . $rename_file;
-                move_uploaded_file($posted_picture, $rename_file_path);
+            Sabel_Db_Transaction::activate();
 
-                if (!is_empty($this->LOGIN_USER->picture)) {
-                    unlink("images/users/{$this->LOGIN_USER->picture}");
+            try {
+             
+                if (!is_empty($this->picture)) {
+                    $posted_picture = $form->picture->path;
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+                    $specific_num = uniqid(mt_rand());
+                    $rename_file = $specific_num . '.' . basename($picture_type);
+                    $rename_file_path = 'images/users/' . $rename_file;
+
+                    $form->picture = $rename_file;
+                    $form->save();
+                    Sabel_Db_Transaction::commit();
+
+                    move_uploaded_file($posted_picture, $rename_file_path);
+
+                    if (!is_empty($this->LOGIN_USER->picture)) {
+                        unlink("images/users/{$this->LOGIN_USER->picture}");
+                    }
+                } else {
+                    $form->save();
+                    Sabel_Db_Transaction::commit();
                 }
-
-                $form->picture = $rename_file;
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
             }
-
-            $form->save();
 
             $this->redirect->to("a: edited, param: {$this->param}");
             return;

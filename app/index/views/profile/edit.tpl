@@ -12,7 +12,7 @@
 
     <p><?= $form->n('picture') ?>：</p>
     <?e $form->file('picture') ?><br />
-    <? if (!empty($LOGIN_USER->picture)) : ?>
+    <? if (!is_empty($LOGIN_USER->picture)) : ?>
         <img src="/images/users/<?= $LOGIN_USER->picture ?>" width="150" height="150"><br />
     <? else : ?>
         なし<br />

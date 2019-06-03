@@ -9,8 +9,8 @@
      <?e $form->text('name') ?>
 
     <p><?= $form->n('picture') ?>：</p>
-     <?e $form->file('picture') ?><br />
-    <? if (!empty($user->picture)) : ?>
+    <?e $form->file('picture') ?><br />
+    <? if (!is_empty($user->picture)) : ?>
         <img src="/images/users/<?= $user->picture ?>" width="150" height="150"><br />
     <? else : ?>
         なし<br />
