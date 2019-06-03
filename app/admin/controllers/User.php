@@ -103,5 +103,63 @@ class Admin_Controllers_User extends Admin_Controllers_Base
     public function edit()
     {
         $this->title = "ユーザー編集画面";
+
+        $this->user = MODEL('Users', $this->param);
+
+        if (!$this->user->isSelected()) {
+            $this->notFound();
+            return;
+        }
+
+        $this->form = $form = new Forms_Users($this->param);
+
+        if ($this->isPost()) {
+            if (is_empty($this->picture)) {
+                $form->submit($this->POST_VARS, [
+                    'name',
+                    'login_id',
+                    'comment',
+                ]);
+            } else {
+                $form->submit($this->POST_VARS, [
+                    'name',
+                    'login_id',
+                    'comment',
+                    'picture',
+                ]);
+            }
+
+            if (!$form->validate()) {
+                $this->errors = $form->getErrors();
+                return;
+            }
+
+            if (!is_empty($this->picture)) {
+                $posted_picture = $form->picture->path;
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $picture_type = $finfo->file($posted_picture);
+                $specific_num = uniqid(mt_rand());
+                $rename_file = $specific_num . '.' . basename($picture_type);
+                $rename_file_path = 'images/users/' . $rename_file;
+                move_uploaded_file($posted_picture, $rename_file_path);
+
+                if (!is_empty($this->LOGIN_USER->picture)) {
+                    unlink("images/users/{$this->LOGIN_USER->picture}");
+                }
+
+                $form->picture = $rename_file;
+            }
+
+            $form->save();
+
+            $this->redirect->to("a: edited, param: {$this->param}");
+            return;
+        }
     }
+
+    public function edited()
+    {
+        $this->title = "ユーザー編集完了画面";
+    }
+    
 }

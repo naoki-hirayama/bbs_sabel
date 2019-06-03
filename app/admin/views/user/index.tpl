@@ -60,7 +60,7 @@
                     <? endif ?>
                 </td>
                 <td>
-                    <a href=""  <?e uri("c: user, a: edit, param: {$user->id}") ?>">編集</a>
+                    <a href="<?e uri("c: user, a: edit, param: {$user->id}") ?>">編集</a>
                 </td>
                 <td>
                     <form action=""  <?e uri('a: delete') ?>" method="post">
