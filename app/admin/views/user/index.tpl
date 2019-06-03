@@ -42,7 +42,11 @@
                     <?= $user->comment ?>
                 </td>
                 <td>
-
+                    <? if (!empty($post_counts[$user->id])) : ?>
+                        <?= $post_counts[$user->id] ?>件
+                    <? else : ?>
+                        0件
+                    <? endif ?>
                 </td>
                 <td>
                     <? if (!is_empty($user->picture)) : ?>
@@ -55,7 +59,7 @@
                     <a href=""  <?e uri("c: user, a: edit, param: {$user->id}") ?>">編集</a>
                 </td>
                 <td>
-                    <form action="<?e uri('a: delete') ?>" method="post">
+                    <form action=""<?e uri('a: delete') ?>" method="post">
                         <input type="hidden" value="<?= $user->id ?>" name="user_id">
                         <input type="submit" value="削除">
                     </form>

@@ -26,6 +26,13 @@ class Admin_Controllers_User extends Admin_Controllers_Base
 
         $paginator = new Paginator($finder);
         $this->paginator = $paginator->build($per_page_records, $this->GET_VARS);
+
+        $user_ids = [];
+        foreach ($paginator->results as $user) {
+            $user_ids[] = $user->id;
+        }
+
+        $this->post_counts = Posts::fetchPostCountByUserIds($user_ids);
     }
 
     public function delete()
@@ -62,10 +69,10 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 $posts->setCondition(eq('user_id', $this->user_id));
                 $posts->delete();
                 
-                
+            
                 $user = MODEL('Users', $this->user_id);
                 $user->delete();
-
+                //dump($user->name);exit;
                 Sabel_Db_Transaction::commit();
                 if (!is_empty($user)) {
                     unlink("images/users/{$user->picture}");
