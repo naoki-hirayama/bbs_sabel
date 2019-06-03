@@ -40,7 +40,6 @@ class Admin_Controllers_User extends Admin_Controllers_Base
     public function delete()
     {
         $this->title = "ユーザー削除画面";
-        $posts = new Posts();
        
         if ($this->isPost()) {
 
@@ -80,6 +79,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 $user->delete();
                 
                 Sabel_Db_Transaction::commit();
+                
                 if (!is_empty($user)) {
                     unlink("images/users/{$user->picture}");
                 }
