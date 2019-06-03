@@ -13,11 +13,9 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             $this->notFound();
             return;
         }
-
-        $this->replies = finder('Replies')
-            ->eq('post_id', $this->param)
-            ->sort('id', 'desc')
-            ->fetchAll();
+        
+        $replies_model = new Replies();
+        $this->replies = $replies_model->fetchByPostId($this->param);
         
         $user_ids = [];
         foreach ($this->replies as $reply) {
