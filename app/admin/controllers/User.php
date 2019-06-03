@@ -20,8 +20,8 @@ class Admin_Controllers_User extends Admin_Controllers_Base
         if (!is_null($form->name)) {
             $finder->contains('name', $form->name);
         }
-        if (!is_null($form->comment)) {
-            $finder->contains('login-id', $form->login_id);
+        if (!is_null($form->login_id)) {
+            $finder->contains('login_id', $form->login_id);
         }
 
         $paginator = new Paginator($finder);
@@ -72,7 +72,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             
                 $user = MODEL('Users', $this->user_id);
                 $user->delete();
-                //dump($user->name);exit;
+                
                 Sabel_Db_Transaction::commit();
                 if (!is_empty($user)) {
                     unlink("images/users/{$user->picture}");
