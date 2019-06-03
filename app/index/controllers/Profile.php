@@ -65,7 +65,14 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 $form->picture = $rename_file;
             }
 
-            $form->save();
+            Sabel_Db_Transaction::activate();
+            try {
+                $form->save();
+                Sabel_Db_Transaction::commit();
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
 
             $this->redirect->to("a: index, param: {$this->LOGIN_USER->id}");
             return;
