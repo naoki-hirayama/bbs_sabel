@@ -82,7 +82,15 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 'post'   => $this->POST_VARS,
             ];
 
-            $form->save();
+            Sabel_Db_Transaction::activate();
+            try {
+                $form->save();
+                Sabel_Db_Transaction::commit();
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
+            
             return $response;
         }
     }
