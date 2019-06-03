@@ -33,8 +33,8 @@ class Admin_Controllers_User extends Admin_Controllers_Base
         foreach ($paginator->results as $user) {
             $user_ids[] = $user->id;
         }
-        $post_repository = new Posts();
-        $this->post_counts = $post_repository->fetchPostCountByUserIds($user_ids);
+        $posts_model = new Posts();
+        $this->post_counts = $posts_model->fetchPostCountByUserIds($user_ids);
     }
 
     public function delete()
@@ -49,7 +49,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             try {
                 $posts_model = new Posts();
                 $replies_model = new Replies();
-                
+
                 $posts = $posts_model->fetchByUserId($this->user_id);
 
                 $post_ids = [];

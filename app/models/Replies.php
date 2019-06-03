@@ -44,7 +44,7 @@ class Replies extends Sabel_Db_Model
     public function fetchByPostId($post_id)
     {
         $replies = finder('Replies')
-            ->eq('user_id', $post_id)
+            ->eq('post_id', $post_id)
             ->fetchAll();
         return $replies;
     }
