@@ -72,8 +72,16 @@ class Index_Controllers_Index extends Index_Controllers_Base
             if ($this->IS_LOGIN) {
                 $form->user_id = $this->LOGIN_USER->id;
             }
+
+            Sabel_Db_Transaction::activate();
+            try {
+                $form->save();
+                Sabel_Db_Transaction::commit();
+            } catch (Exception $e) {
+                Sabel_Db_Transaction::rollback();
+                throw $e;
+            }
             
-            $form->save();
             $this->redirect->to('a: sent');
             return;
         }
