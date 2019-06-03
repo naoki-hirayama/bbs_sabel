@@ -40,15 +40,15 @@ class Admin_Controllers_User extends Admin_Controllers_Base
     public function delete()
     {
         $this->title = "ユーザー削除画面";
-
+        $posts = new Posts();
+       
         if ($this->isPost()) {
 
             Sabel_Db_Transaction::activate();
 
             try {
-                $posts = finder('Posts')
-                    ->eq('user_id', $this->user_id)
-                    ->fetchAll();
+                $posts_model = new Posts();
+                $posts = $posts_model->fetchByUserId($this->user_id);
 
                 $post_ids = [];
                 $post_images = [];
