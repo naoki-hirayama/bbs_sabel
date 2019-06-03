@@ -48,6 +48,8 @@ class Admin_Controllers_User extends Admin_Controllers_Base
 
             try {
                 $posts_model = new Posts();
+                $replies_model = new Replies();
+                
                 $posts = $posts_model->fetchByUserId($this->user_id);
 
                 $post_ids = [];
@@ -58,20 +60,16 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 }
                 
                 if (!is_empty($post_ids)) {
-                    $replies_by_users_pictures = finder('Replies')
-                        ->in('post_id', $post_ids)
-                        ->fetchAll();
-                    $replies_by_users = MODEL('Replies');
-                    $replies_by_users->setCondition(in('post_id', $post_ids));
-                    $replies_by_users->delete();
+                    $_replies = $replies_model->fetchByPostIds($post_ids);
+                    $replies = MODEL('Replies');
+                    $replies->setCondition(in('post_id', $post_ids));
+                    $replies->delete();
                 }
 
-                $replies_pictures = finder('Replies')
-                    ->eq('user_id', $this->user_id)
-                    ->fetchAll();
-                $replies = MODEL('Replies');
-                $replies->setCondition(eq('user_id', $this->user_id));
-                $replies->delete();
+                $_replies_by_user = $replies_model->fetchByUserId($this->user_id);
+                $replies_by_user = MODEL('Replies');
+                $replies_by_user->setCondition(eq('user_id', $this->user_id));
+                $replies_by_user->delete();
                 
                 $posts = MODEL('Posts');
                 $posts->setCondition(eq('user_id', $this->user_id));
@@ -86,9 +84,9 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                     unlink("images/users/{$user->picture}");
                 }
                 
-                if (!is_empty($replies_pictures)) {
-                    foreach ($replies_pictures as $replies_picture) {
-                        unlink("images/replies/{$replies_picture->picture}");
+                if (!is_empty($_replies_by_user)) {
+                    foreach ($_replies_by_user as $_reply_by_user) {
+                        unlink("images/replies/{$_reply_by_user->picture}");
                     }
                 }
 
@@ -98,9 +96,9 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                     }
                 }
 
-                if (!is_empty($replies_by_users_pictures)) {
-                    foreach ($replies_by_users_pictures as $replies_by_users_picture) {
-                        unlink("images/replies/{$replies_by_users_picture->picture}");
+                if (!is_empty($_replies)) {
+                    foreach ($_replies as $_reply) {
+                        unlink("images/replies/{$_reply->picture}");
                     }
                 }
                 

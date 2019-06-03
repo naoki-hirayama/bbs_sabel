@@ -24,4 +24,20 @@ class Replies extends Sabel_Db_Model
         }
         return null;
     }
+
+    public function fetchByPostIds($post_ids)
+    {
+        $replies = finder('Replies')
+            ->in('post_id', $post_ids)
+            ->fetchAll();
+        return $replies;
+    }
+
+    public function fetchByUserId($user_id)
+    {
+        $replies = finder('Replies')
+            ->eq('user_id', $user_id)
+            ->fetchAll();
+        return $replies;
+    }
 }
