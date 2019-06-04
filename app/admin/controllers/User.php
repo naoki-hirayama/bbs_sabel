@@ -163,7 +163,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                     $form->picture = $rename_file;
 
                     if (!move_uploaded_file($posted_picture, $rename_file_path)) {
-                        throw new Exception( 'Can not upload image');
+                        throw new Exception('Can not upload image');
                     }
                     
                     if (!is_empty($this->user->picture)) {
