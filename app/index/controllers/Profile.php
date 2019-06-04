@@ -49,25 +49,30 @@ class Index_Controllers_Profile extends Index_Controllers_Base
                 return;
             }
             
-            if (!is_empty($this->picture)) {
-                $posted_picture = $form->picture->path;
-                $finfo = new finfo(FILEINFO_MIME_TYPE);
-                $picture_type = $finfo->file($posted_picture);
-                $specific_num = uniqid(mt_rand());
-                $rename_file = $specific_num . '.' . basename($picture_type);
-                $rename_file_path = 'images/users/' . $rename_file;
-                move_uploaded_file($posted_picture, $rename_file_path);
-
-                if (!is_empty($this->LOGIN_USER->picture)) {
-                    unlink("images/users/{$this->LOGIN_USER->picture}");
-                }
-
-                $form->picture = $rename_file;
-            }
+            
 
             Sabel_Db_Transaction::activate();
             
             try {
+                if (!is_empty($this->picture)) {
+                    $posted_picture = $form->picture->path;
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+                    $specific_num = uniqid(mt_rand());
+                    $rename_file = $specific_num . '.' . basename($picture_type);
+                    $rename_file_path = 'images/users/' . $rename_file;
+                    
+                    if (!move_uploaded_file($posted_picture, $rename_file_path)) {
+                        throw new Exception('Can not upload image');
+                    }
+                    
+                    if (!is_empty($this->LOGIN_USER->picture)) {
+                        unlink("images/users/{$this->LOGIN_USER->picture}");
+                    }
+
+                    $form->picture = $rename_file;
+                }
+
                 $form->save();
                 Sabel_Db_Transaction::commit();
             } catch (Exception $e) {
