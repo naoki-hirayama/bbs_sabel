@@ -14,8 +14,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             return;
         }
         
-        $replies_model = new Replies();
-        $this->replies = $replies_model->fetchByPostId($this->param);
+        $this->replies = Replies::fetchByPostId($this->param);
         
         $user_ids = [];
         foreach ($this->replies as $reply) {
