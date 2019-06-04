@@ -50,6 +50,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $this->errors = $form->getErrors();
                 return;
             }
+
             Sabel_Db_Transaction::activate();
             try {
                 if (!is_empty($form->picture)) {
@@ -73,7 +74,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 }
                 $form->save();
                 Sabel_Db_Transaction::commit();
-                
+
             } catch (Exception $e) {
                 Sabel_Db_Transaction::rollback();
                 throw $e;
@@ -123,8 +124,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
             Sabel_Db_Transaction::activate();
 
             try {
-                $replies_model = new Replies;
-                $replies = $replies_model->fetchByPostId($this->param);
+                $replies = Replies::fetchByPostId($this->param);
 
                 $post_repleis = MODEL('Replies');
                 $post_repleis->setCondition(eq('post_id', $this->param));
@@ -136,7 +136,9 @@ class Index_Controllers_Index extends Index_Controllers_Base
 
                 if (!is_empty($replies)) {
                     foreach ($replies as $reply) {
-                        unlink("images/replies/{$reply->picture}");
+                        if (!is_empty($reply->picture)) {
+                            unlink("images/replies/{$reply->picture}");
+                        }
                     }
                 }
 
