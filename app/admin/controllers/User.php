@@ -148,26 +148,28 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 return;
             }
 
-            if (!is_empty($this->picture)) {
-                $posted_picture = $form->picture->path;
-                $finfo = new finfo(FILEINFO_MIME_TYPE);
-                $picture_type = $finfo->file($posted_picture);
-                $specific_num = uniqid(mt_rand());
-                $rename_file = $specific_num . '.' . basename($picture_type);
-                $rename_file_path = 'images/users/' . $rename_file;
-                
-                $form->picture = $rename_file;
-                
-                move_uploaded_file($posted_picture, $rename_file_path);
-
-                if (!is_empty($this->user->picture)) {
-                    unlink("images/users/{$this->user->picture}");
-                }
-            }
-            
             Sabel_Db_Transaction::activate();
-
+            
             try {
+                if (!is_empty($this->picture)) {
+                    $posted_picture = $form->picture->path;
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+                    $specific_num = uniqid(mt_rand());
+                    $rename_file = $specific_num . '.' . basename($picture_type);
+                    $rename_file_path = 'images/users/' . $rename_file;
+                    
+                    $form->picture = $rename_file;
+
+                    if (!move_uploaded_file($posted_picture, $rename_file_path)) {
+                        return;
+                    }
+
+                    if (!is_empty($this->user->picture)) {
+                        unlink("images/users/{$this->user->picture}");
+                    }
+                }
+                
                 $form->save();
                 Sabel_Db_Transaction::commit();
                 
