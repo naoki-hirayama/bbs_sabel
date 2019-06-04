@@ -76,13 +76,13 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 ];
                 return $response;
             }
-
-            $form->save();
-            
             $response = [
                 'status' => true,
                 'post'   => $this->POST_VARS,
             ];
+
+            $form->save();
+            
             return $response;
         }
     }
