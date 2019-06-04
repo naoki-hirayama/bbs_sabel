@@ -150,6 +150,8 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             try {
                 $form->save();
                 Sabel_Db_Transaction::commit();
+
+                
             } catch (Exception $e) {
                 Sabel_Db_Transaction::rollback();
                 throw $e;

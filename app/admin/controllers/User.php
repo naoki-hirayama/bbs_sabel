@@ -74,7 +74,6 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 $posts->setCondition(eq('user_id', $this->user_id));
                 $posts->delete();
                 
-            
                 $user = MODEL('Users', $this->user_id);
                 $user->delete();
                 
@@ -125,7 +124,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             $this->notfound();
             return;
         }
-
+        
         $this->form = $form = new Forms_Users($this->param);
 
         if ($this->isPost()) {
@@ -149,7 +148,6 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 return;
             }
 
-             
             if (!is_empty($this->picture)) {
                 $posted_picture = $form->picture->path;
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -157,12 +155,16 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 $specific_num = uniqid(mt_rand());
                 $rename_file = $specific_num . '.' . basename($picture_type);
                 $rename_file_path = 'images/users/' . $rename_file;
-
+                
                 $form->picture = $rename_file;
                 
-                move_uploaded_file($posted_picture, $rename_file_path);                    
-            }
+                move_uploaded_file($posted_picture, $rename_file_path);
 
+                if (!is_empty($this->user->picture)) {
+                    unlink("images/users/{$this->user->picture}");
+                }
+            }
+            
             Sabel_Db_Transaction::activate();
 
             try {

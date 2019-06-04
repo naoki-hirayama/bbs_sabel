@@ -65,7 +65,7 @@ class Index_Controllers_Index extends Index_Controllers_Base
                 $specific_num = uniqid(mt_rand());
                 $rename_file = $specific_num . '.' . basename($picture_type);
                 $rename_file_path = 'images/posts/' . $rename_file;
-                move_uploaded_file( $posted_picture, $rename_file_path);
+                move_uploaded_file($posted_picture, $rename_file_path);
                 $form->picture = $rename_file;
             }
 
