@@ -39,16 +39,16 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             Sabel_Db_Transaction::activate();
 
             try {
-                $this->post = MODEL('Posts', $this->post_id);
-                $replies_model = new Replies;
+                $post = MODEL('Posts', $this->post_id);
+                
 
-                $replies = $replies_model->fetchByPostId($this->post_id);
+                $replies = Replies::fetchByPostId($this->post_id);
                 
                 $post_repleis = MODEL('Replies');
                 $post_repleis->setCondition(eq('post_id', $this->post_id));
                 $post_repleis->delete();
 
-                $this->post->delete();
+                $post->delete();
 
                 Sabel_Db_Transaction::commit();
 
@@ -60,8 +60,8 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
                     }
                 }
 
-                if (!is_empty($this->post->picture)) {
-                    unlink("images/posts/{$this->post->picture}");
+                if (!is_empty($post->picture)) {
+                    unlink("images/posts/{$post->picture}");
                 }
             } catch (Exception $e) {
                 Sabel_Db_Transaction::rollback();
