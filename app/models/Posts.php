@@ -25,7 +25,7 @@ class Posts extends Sabel_Db_Model
         return null;
     }
 
-    public function fetchByUserId($user_id)
+    public static function fetchByUserId($user_id)
     {
         $posts = finder('Posts')
             ->eq('user_id', $user_id)
