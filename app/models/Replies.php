@@ -41,7 +41,7 @@ class Replies extends Sabel_Db_Model
         return $replies;
     }
 
-    public function fetchByPostId($post_id)
+    public static function fetchByPostId($post_id)
     {
         $replies = finder('Replies')
             ->eq('post_id', $post_id)
