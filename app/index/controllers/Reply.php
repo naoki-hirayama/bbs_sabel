@@ -18,9 +18,9 @@ class Index_Controllers_Reply extends Index_Controllers_Base
         }
 
         $this->replies = finder('Replies')
-                         ->eq('post_id', $this->param)
-                         ->sort('id', 'desc')
-                         ->fetchAll();
+                    ->eq('post_id', $this->param)
+                    ->sort('id', 'desc')
+                    ->fetchAll();
 
         $this->total_replies = count($this->replies);
 
@@ -61,7 +61,7 @@ class Index_Controllers_Reply extends Index_Controllers_Base
                     }
                     $form->picture = $rename_file;
                 }
-                
+
                 if ($this->IS_LOGIN) {
                     $form->user_id = $this->LOGIN_USER->id;
                 }
