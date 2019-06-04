@@ -149,7 +149,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             }
 
             Sabel_Db_Transaction::activate();
-            
+
             try {
                 if (!is_empty($this->picture)) {
                     $posted_picture = $form->picture->path;
@@ -164,7 +164,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                     if (!move_uploaded_file($posted_picture, $rename_file_path)) {
                         return;
                     }
-
+                    
                     if (!is_empty($this->user->picture)) {
                         unlink("images/users/{$this->user->picture}");
                     }
