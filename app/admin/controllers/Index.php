@@ -48,7 +48,7 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
         $post = MODEL('Posts', $this->id);
 
         if (!$post->isSelected()) {
-            $this->notFound();
+            $this->notfound();
             return;
         }
         
@@ -77,21 +77,22 @@ class Admin_Controllers_Index extends Admin_Controllers_Base
                 return $response;
             }
 
-            $response = [
-                'status' => true,
-                'post'   => $this->POST_VARS,
-            ];
-
             Sabel_Db_Transaction::activate();
             try {
                 $form->save();
                 Sabel_Db_Transaction::commit();
+
+                $response = [
+                    'status' => true,
+                    'post'   => $this->POST_VARS,
+                ];
+                return $response;
+
             } catch (Exception $e) {
                 Sabel_Db_Transaction::rollback();
                 throw $e;
             }
             
-            return $response;
         }
     }
 
