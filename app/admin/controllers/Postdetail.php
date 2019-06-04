@@ -142,12 +142,13 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
                 return $response;
             }
             
-            $form->save();
-            
             $response = [
                 'status' => true,
                 'reply'  => $this->POST_VARS,
             ];
+
+            $form->save();
+            
             return $response;
         }
     }
