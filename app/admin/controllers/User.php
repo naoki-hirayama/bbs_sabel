@@ -46,10 +46,7 @@ class Admin_Controllers_User extends Admin_Controllers_Base
             Sabel_Db_Transaction::activate();
 
             try {
-                $posts_model = new Posts();
-                $replies_model = new Replies();
-
-                $posts = $posts_model->fetchByUserId($this->user_id);
+                $posts = Posts::fetchByUserId($this->user_id);
 
                 $post_ids = [];
                 $post_images = [];
