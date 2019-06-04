@@ -82,11 +82,13 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 
                 if (!is_empty($_replies_by_user)) {
                     foreach ($_replies_by_user as $_reply_by_user) {
-                        unlink("images/replies/{$_reply_by_user->picture}");
+                        if (!is_empty($_reply_by_user->picture)) {
+                            unlink("images/replies/{$_reply_by_user->picture}");
+                        }
                     }
                 }
 
-                if (!is_empty($posts)) {
+                if (!is_empty($post_images)) {
                     foreach ($post_images as $post_image) {
                         unlink("images/posts/{$post_image}");
                     }
