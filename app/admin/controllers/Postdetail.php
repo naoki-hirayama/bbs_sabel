@@ -54,7 +54,9 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
 
                 if (!is_empty($replies)) {
                     foreach ($replies as $reply) {
-                        unlink("images/replies/{$reply->picture}");
+                        if (!is_empty($reply->picture)) {
+                            unlink("images/replies/{$reply->picture}");
+                        }
                     }
                 }
 
