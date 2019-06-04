@@ -33,7 +33,7 @@ class Replies extends Sabel_Db_Model
         return $replies;
     }
 
-    public function fetchByUserId($user_id)
+    public static function fetchByUserId($user_id)
     {
         $replies = finder('Replies')
             ->eq('user_id', $user_id)
