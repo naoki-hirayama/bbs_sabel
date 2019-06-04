@@ -187,7 +187,6 @@ class Admin_Controllers_User extends Admin_Controllers_Base
     public function edited()
     {
         $this->title = "ユーザー編集完了画面";
-
     }
     
 }
