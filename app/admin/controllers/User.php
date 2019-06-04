@@ -96,7 +96,9 @@ class Admin_Controllers_User extends Admin_Controllers_Base
 
                 if (!is_empty($_replies)) {
                     foreach ($_replies as $_reply) {
-                        unlink("images/replies/{$_reply->picture}");
+                        if (!is_empty($_reply->picture)) {
+                            unlink("images/replies/{$_reply->picture}");
+                        }
                     }
                 }
                 
