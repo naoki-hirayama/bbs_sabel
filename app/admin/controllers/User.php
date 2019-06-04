@@ -56,13 +56,13 @@ class Admin_Controllers_User extends Admin_Controllers_Base
                 }
                 
                 if (!is_empty($post_ids)) {
-                    $_replies = $replies_model->fetchByPostIds($post_ids);
+                    $_replies = Replies::fetchByPostIds($post_ids);
                     $replies = MODEL('Replies');
                     $replies->setCondition(in('post_id', $post_ids));
                     $replies->delete();
                 }
 
-                $_replies_by_user = $replies_model->fetchByUserId($this->user_id);
+                $_replies_by_user = Replies::fetchByUserId($this->user_id);
                 $replies_by_user = MODEL('Replies');
                 $replies_by_user->setCondition(eq('user_id', $this->user_id));
                 $replies_by_user->delete();
