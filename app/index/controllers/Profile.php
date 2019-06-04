@@ -129,14 +129,7 @@ class Index_Controllers_Profile extends Index_Controllers_Base
             $form->getModel()->unsetValue('confirm_password');
             $form->password = password_hash($form->password, PASSWORD_DEFAULT);
 
-            Sabel_Db_Transaction::activate();
-            try {
-                $form->save();
-                Sabel_Db_Transaction::commit();
-            } catch (Exception $e) {
-                Sabel_Db_Transaction::rollback();
-                throw $e;
-            }
+            $form->save();
             
             $this->redirect->to('a: edit');
             return;
