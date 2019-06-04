@@ -25,7 +25,7 @@ class Replies extends Sabel_Db_Model
         return null;
     }
 
-    public function fetchByPostIds($post_ids)
+    public static function fetchByPostIds($post_ids)
     {
         $replies = finder('Replies')
             ->in('post_id', $post_ids)
