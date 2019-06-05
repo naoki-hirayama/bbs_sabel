@@ -40,7 +40,6 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             try {
                 $post = MODEL('Posts', $this->post_id);
                 
-
                 $replies = Replies::fetchByPostId($this->post_id);
                 
                 $post_repleis = MODEL('Replies');
@@ -148,7 +147,7 @@ class Admin_Controllers_Postdetail extends Admin_Controllers_Base
             ];
 
             $form->save();
-            
+
             return $response;
         }
     }
