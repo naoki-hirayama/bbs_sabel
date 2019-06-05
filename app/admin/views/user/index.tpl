@@ -46,7 +46,7 @@
                     <? endif ?>
                 </td>
                 <td>
-                    <? if (!empty($post_counts[$user->id])) : ?>
+                    <? if (!is_empty($post_counts[$user->id])) : ?>
                         <?= $post_counts[$user->id] ?>件
                     <? else : ?>
                         0件
